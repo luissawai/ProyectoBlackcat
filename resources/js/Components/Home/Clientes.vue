@@ -114,8 +114,16 @@ onMounted(() => {
 .brand-showcase {
   position: relative;
   overflow: hidden;
-  padding: 40px 0;
+  /* Añadimos máscara de desvanecimiento */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 1px,
+    black 15%,
+    black 15%,
+    transparent 100%
+  );
 }
+
 
 .carousel-container {
   position: relative;

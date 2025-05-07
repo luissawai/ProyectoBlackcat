@@ -175,12 +175,10 @@ function getStackStyle(offset) {
   const translateY = -20 * offset;
   const scale = 1 - 0.04 * offset;
   const zIndex = 10 - offset;
-  const opacity = 1 - offset * 0.1;
 
   return {
     transform: `translateY(${translateY}px) scale(${scale})`,
     zIndex,
-    opacity: 0.9,
     pointerEvents: 'none',
     position: 'absolute',
     top: 0,
@@ -213,19 +211,23 @@ function nextCard() {
   }
 }
 
+const savedScrollPosition = ref(0)
+
 function prevCard() {
   if (currentCard.value === 0) {
-    router.visit('/', {
+    // Guardar posición actual antes de navegar
+    savedScrollPosition.value = window.pageYOffset || document.documentElement.scrollTop
+    
+    router.visit('/#formulario', {
+      preserveScroll: true, // Esto ayuda a Inertia.js a mantener la posición
       onSuccess: () => {
-        // Espera que la página cargue, luego scroll
+        // Restaurar posición después de la navegación
         setTimeout(() => {
-          const target = document.getElementById('formulario')
-          if (target) {
-            const yOffset = -180 // Ajusta el valor según lo que necesites
-            const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset
-            window.scrollTo({ top: y, behavior: 'smooth' })
-          }
-        }, 300)
+          window.scrollTo({
+            top: savedScrollPosition.value,
+            behavior: 'auto' // 'auto' en lugar de 'smooth' para que sea instantáneo
+          })
+        }, 50) // Pequeño delay para asegurar que el DOM está listo
       }
     })
   } else {
@@ -275,10 +277,6 @@ function submit() {
   z-index: 1000;
 }
 
-.card.stacked-card {
-  opacity: 1; /* Reducir la opacidad para mejor visibilidad */
-}
-
 .card-stack {
   position: relative;
   width: 100%;
@@ -288,15 +286,20 @@ function submit() {
 .stack-container {
   position: relative;
   height: 100%;
+  height: 800px;
 }
 
+.stacked-card{
+  height: 100%;
+  max-height: 400px;
+}
 .background-card {
   position: absolute;
   width: 100%;
   top: 0;
   left: 0;
-  height: 200px;
-  min-height: 00px;
+  height: 10px;
+  min-height: 200px;
   background: #161716;
   border: 0.1px solid #727270;
   border-radius: 24px;
@@ -318,34 +321,34 @@ function submit() {
   box-sizing: border-box;
 }
 .stack-transition-enter-active {
-  animation: card-enter 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: card-enter 0.3s cubic-bezier(0.42, 0, 0.58, 1.0) forwards;
 }
 
 .stack-transition-leave-active {
-  animation: card-leave 0.3s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+  animation: card-leave 0.3s cubic-bezier(0.42, 0, 0.58, 1.0) forwards;
 }
 
 @keyframes card-enter {
   0% {
     transform: translateY(-30px) scale(0.95);
-    opacity: 0.5;
+    opacity: 1;
   }
 
   100% {
-    transform: translateY(0) scale(1);
+    transform: translateY(0px) scale(1);
     opacity: 1;
   }
 }
 
 @keyframes card-leave {
   0% {
-    transform: translateY(0) scale(1);
+    transform: translateY(-30px) scale(1);
     opacity: 1;
   }
 
   100% {
-    transform: translateY(30px) scale(0.95);
-    opacity: 0.5;
+    transform: translateY(-30px) scale(0.95);
+    opacity: 1;
   }
 }
 
