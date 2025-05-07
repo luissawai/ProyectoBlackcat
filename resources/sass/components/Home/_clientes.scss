@@ -1,0 +1,84 @@
+@use "../../base/variables" as v;
+@use "../../base/mixins" as m;
+
+
+.row-logo-1 {
+
+    .invisible {
+        display: none !important;
+
+        @include m.tablet {
+            display: block !important;
+        }
+    }
+
+   
+}
+
+
+
+.contain-logo {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    @include m.tablet {
+        gap: 6rem;
+        
+    }
+  
+    .box-logo {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 0 1 auto;
+    }
+  }
+  
+  .contain-image-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  
+  .row-logo-1 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5rem;
+    max-width: 100rem;
+    margin-left: auto;
+    margin-right: auto;
+  
+    .box-logo {
+      width: auto;
+    }
+  }
+
+  .row-logo-2 {
+    max-width: 75rem;
+    justify-content: start;
+    margin: 0 auto;
+}
+  
+  .row-logo-1,
+  .row-logo-2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    @include m.tablet {
+        gap: 6rem;
+    }
+  }
+  
+  .row-logo-1 .box-logo,
+  .row-logo-2 .box-logo {
+    width: auto;
+  }
+  

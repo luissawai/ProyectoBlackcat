@@ -1,0 +1,27 @@
+@use 'base/variables';
+@use 'base/globales';
+@use 'base/mixins';
+
+
+// Components
+@use './components/header';
+@use './components/footer';
+
+@use './components/contact';
+@use './components/politicas';
+@use './components/modal2025';
+
+
+
+@use './components/Home/servicios_crm';
+@use './components/Home/clientes';
+@use './components/Home/about';
+
+
+// Fuentes
+@use './base/fonts';
+
+
+// Views
+@use './Pages/home';
+

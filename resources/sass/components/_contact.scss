@@ -1,0 +1,287 @@
+@use "../base/variables" as v;
+@use "../base/mixins" as m;
+
+.contain-contact {
+    .contain-info {
+    }
+
+    .contain-step-number {
+        max-width: 60rem;
+        padding: 9rem 0;
+        .step-3 {
+            flex-grow: 0 !important;
+        }
+    }
+
+    .title {
+        max-width: 75rem;
+    }
+
+    .arrow-left {
+        transform: rotate(180deg);
+    }
+
+    .arrow-right {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+/* CONTROL FLECHAS */
+.contain-contact.step-1 {
+    .button-navigation {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+
+.contain-contact.step-2,
+.contain-contact.step-3 {
+    .button-navigation {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.steps-contain-form {
+    padding: 10rem;
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"] {
+        background-color: transparent !important;
+        box-shadow: unset !important;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        padding: 0;
+        font-size: 1.6rem;
+        line-height: 0 !important;
+        color: #8e8e93 !important;
+        padding-left: 1rem;
+        padding-top: 1rem;
+        margin-left: 1rem;
+    }
+
+    label {
+        font-family: v.$font-mono;
+    }
+}
+
+.otros-label {
+    line-height: 1;
+    @include m.tablet {
+        padding-left: 1rem;
+
+    }
+}
+
+.button-navigation {
+    max-width: 90rem;
+}
+
+.ipt-other-option {
+    margin-bottom: 0.9rem;
+}
+
+.form-control.ipt-other-option {
+    margin: 0;
+}
+
+.row-step-3 {
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"] {
+        margin: 0;
+        padding: 0;
+    }
+    margin .b-1,
+    .b-2,
+    .b-3,
+    .b-4 {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.option-label {
+    cursor: pointer;
+    margin-bottom: 10px;
+    @include m.tablet {
+        padding: 10px;
+    }
+    transition: background 0.3s ease;
+}
+
+.option-label.selected {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+.steps-contain-form {
+    padding-left: 0;
+    padding-right: 0;
+
+    @include m.tablet {
+        padding-left: 10rem;
+        padding-right: 10rem;
+    }
+    .form-select {
+        box-shadow: none;
+        border-left: 0;
+        border-top: 0;
+        border-right: 0;
+        font-size: 1.6rem;
+        color: white !important;
+    }
+}
+
+/* Asegurarse de que el contenedor tenga una posición relativa para que el pseudo-elemento se posicione correctamente */
+.form-select {
+    display: block;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: black;
+    padding-right: 2.5rem;
+    position: relative;
+    max-height: 20rem !important;
+}
+
+select:disabled {
+    background-color: black !important;
+}
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-header {
+    background: v.$black;
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+    border-left: 0;
+    border-top: 0;
+    padding-left: 0;
+    border-right: 0;
+}
+
+.dropdown-list {
+    position: absolute;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: v.$black;
+    border: 1px solid #ccc;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 10;
+}
+
+.dropdown-list li {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.dropdown-list li:hover {
+    background: #242424;
+}
+
+.dropdown-arrow {
+    width: 12px;
+    height: 12px;
+    transform: rotate(90deg);
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.arrow-dropdown {
+    width: 7px;
+}
+
+.form-control:focus {
+    border-color: v.$white;
+}
+
+.contain-otros {
+    @include m.tablet {
+        padding: 10px;
+    }
+}
+
+.step-circle {
+    background: #242424;
+    color: #575756;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 6.5rem;
+    height: 6.5rem;
+    font-size: 3.2rem;
+
+    @include m.tablet {
+        width: 9rem;
+        height: 9rem;
+
+        font-size: 7rem;
+    }
+}
+
+
+.btn.btn-light,
+.btn-send {
+    background-color: #8e8e93 !important;
+    border: unset;
+    min-width: auto;
+    padding: 1.5rem !important;
+    display: flex;
+    justify-content: center;
+    border-radius: unset;
+    transition: .3s;
+
+    &:hover {
+        background-color: #575756 !important;
+    }
+
+    @include m.tablet {
+        min-width: 20rem;
+    }
+}
+
+
+.btn-send {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    font-family: "SFMono", sans-serif;
+
+    @include m.tablet {
+        font-size: 1.8rem;
+        
+    }
+}
+
+
+/* Sweetalert */
+div#swal2-html-container {
+    font-size: 1.6rem;
+}
+
+button.swal2-confirm.swal2-styled {
+    font-size: 1.3rem;
+}

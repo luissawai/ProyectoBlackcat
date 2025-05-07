@@ -1,0 +1,52 @@
+@use "../base/variables" as v;
+@use "../base/mixins" as m;
+
+.contain-cookies {
+    padding-top: 10rem;
+    @include m.tablet {
+        padding-top: 15rem;
+    }
+
+    p,
+    .list li {
+        color: v.$gray-1;
+        font-size: 1.6rem;
+    }
+
+    h5 {
+        font-size: 1.8rem;
+
+        @include m.tablet {
+            font-size: 2.5rem;
+
+        }    }
+}
+
+.contain-aviso-legal {
+    padding-top: 10rem;
+    @include m.tablet {
+        padding-top: 15rem;
+    }
+    p,
+    .list li {
+        color: v.$gray-1;
+        font-size: 1.6rem;
+    }
+
+    h5 {
+        font-size: 1.8rem;
+
+        @include m.tablet {
+            font-size: 2.5rem;
+
+        }
+    }
+}
+
+
+.contain-aviso-legal {
+    span {
+        color: v.$gray-1;
+
+    }
+}

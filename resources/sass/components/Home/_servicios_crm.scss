@@ -1,0 +1,119 @@
+@use "../../base/variables" as v;
+@use "../../base/mixins" as m;
+
+.contain-servicios {
+    ul {
+        li {
+            .arrow-right {
+                width: auto !important;
+            }
+        }
+    }
+}
+
+/* SERVICIOS */
+.menu-herr {
+    .list-image-crm {
+        li {
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            display: flex;
+            gap: 1rem;
+
+            .arrow-right {
+                transform: scale(1.8);
+            }
+
+            span.li-item-text,
+            span.resaltado {
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+            span.li-item-text {
+                font-size: 1.3rem;
+
+                @include m.tablet {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
+}
+
+.active-crm {
+    text-decoration: underline;
+}
+
+.titulo-dinamico {
+    font-family: v.$font-sft-400;
+    font-weight: 500;
+    font-size: 2rem;
+
+    @include m.tablet {
+        font-size: 2.5rem;
+    }
+}
+
+.descripcion-dinamica {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.4rem;
+    padding: 2rem;
+    @include m.tablet {
+        font-size: 1.7rem;
+        padding: 0;
+    }
+}
+
+.buttons {
+    padding-top: 5rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    @include m.tablet {
+        flex-wrap: nowrap;
+    }
+    .check-block {
+        background-color: #7e7e7d;
+        padding: 2rem;
+        width: 100%;
+        margin: 0 1.5rem;
+        color: black;
+
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+    }
+}
+
+.check-block svg {
+    width: 4rem; /* Tamaño del ícono */
+    height: 4rem; /* Tamaño del ícono */
+}
+
+/* ACTIVE TITLE CRM */
+.title-crms {
+    color: #515151;
+    font-weight: bold;
+}
+
+.arrow-button {
+    color: #515151;
+
+}
+
+.active-title-crm {
+    .arrow-button {
+        transform: rotate(90deg);
+        color: v.$white;
+
+    }
+
+    .title-crms {
+        color: v.$white;
+    }
+}

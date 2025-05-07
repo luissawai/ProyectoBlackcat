@@ -1,0 +1,36 @@
+// Media queries
+
+@use './variables' as v;
+
+@mixin telefono {
+    @media(min-width: v.$telefono) {
+        @content;
+    }
+}
+@mixin tablet {
+    @media(min-width: v.$tablet) {
+        @content;
+    }
+}
+@mixin desktop {
+    @media(min-width: v.$desktop) {
+        @content;
+    }
+}
+@mixin desktopXL {
+    @media(min-width: v.$desktopXL) {
+        @content;
+    }
+}
+
+@mixin portatil {
+    @media (min-width: 1200px) and (max-height: 660px) {
+        @content;
+    }
+}
+
+@mixin smallTelefono {
+    @media(max-width: 320px) {
+       @content;
+    }
+}

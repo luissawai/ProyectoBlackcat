@@ -1,0 +1,83 @@
+@use "../base/variables" as v;
+@use "../base/mixins" as m;
+
+header {
+    z-index: 1000;
+}
+
+header#inicio {
+    padding-top: 8.5rem;
+}
+
+.navbar {
+    color: v.$white;
+
+    .navbar-logo {
+        width: 150px;
+    }
+
+    .navbar-nav {
+        display: flex;
+        gap: 3rem;
+        @include m.tablet {
+            gap: 6rem;
+            
+        }
+        .nav-item {
+            .nav-link {
+                color: v.$white;
+                font-family: v.$font-mono !important;
+                text-transform: uppercase;
+            }
+        }
+    }
+}
+
+.navbar.scroll-menu-active {
+    background-color: #161716;
+}
+
+
+/* FIX */
+.contain-header {
+    .b-1 {
+        width: 100%;
+        @include m.desktop {
+            width: auto;
+        }
+    }
+}
+
+div#navbarNav {
+    background: black;
+    margin-top: 2rem;
+    @include m.tablet {
+        background: transparent;
+        margin-top: 0 !important;
+        padding-top: 0;
+
+    }   
+
+    .navbar-nav {
+        height: calc(90vh - 5rem);
+        justify-content: center;
+        @include m.tablet {
+            height: auto;
+        }
+        .nav-item {
+            text-align: center;
+            .nav-link {
+                padding: 0;
+                transition: .5s;
+
+                &:hover {
+                    color: v.$bg-hover;
+                }
+            }
+        }
+    }
+}
+
+.navbar-toggler:focus {
+    box-shadow: unset;
+}

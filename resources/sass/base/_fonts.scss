@@ -1,0 +1,43 @@
+
+@font-face {
+    font-family: 'SFMonoBold';
+    src: url('/fonts/SFMono/SFMonoBold.otf') format('opentype'); 
+    font-weight: bold;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'SFMono';
+    src: url('/fonts/SFMono/SFMonoRegular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+
+
+  
+
+
+  @font-face {
+    font-family: 'SFTSchriftedSans';
+    src: url('/fonts/SFTSchriftedSans/SFTSchriftedSansTRIAL-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+  
+  @font-face {
+    font-family: 'SFTSchriftedSans';
+    src: url('/fonts/SFTSchriftedSans/SFTSchriftedSansTRIAL-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  
+
+  @font-face {
+    font-family: 'SFTSchriftedSansBold';
+    src: url('/fonts/SFTSchriftedSans/SFTSchriftedSansTRIAL-Bold.ttf') format('truetype'); 
+    font-weight: 700; 
+    font-style: bold;
+  }

@@ -1,0 +1,218 @@
+@use "../base/variables" as v;
+@use "../base/mixins" as m;
+
+.container-home {
+    width: 100%;
+
+    .info-home-top {
+        .title {
+            transition: 0.3s;
+            font-size: 2.5rem !important;
+            text-transform: uppercase;
+            text-align: center;
+            font-family: v.$font-mono;
+
+            @include m.tablet {
+                font-size: 5.2rem !important;
+            }
+
+            @include m.desktop {
+                font-size: 7.2rem !important;
+            }
+        }
+    }
+
+    .b-2 {
+        .p-info {
+            font-size: 1.5rem;
+            max-width: 800px;
+            @include m.tablet {
+                font-size: 1.8rem;
+            }
+        }
+    }
+}
+
+.bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    object-fit: cover;
+
+    
+
+}
+
+/* SECTION 2 */
+.section {
+    .title-sistemas-gestion {
+        display: inline-block;
+        border-bottom: 2px solid v.$whitev2;
+        padding-bottom: 1rem;
+    }
+    .row-1 {
+        h4 {
+            font-size: 3rem;
+            max-width: 100rem;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 500;
+            font-family: v.$font-mono;
+            @include m.tablet {
+                font-size: 7rem;
+            }
+        }
+    }
+}
+
+/* MENU HERRAMIENTRA - HOME */
+
+.menu-herr {
+    color: v.$white;
+    details {
+        border-radius: 5px;
+
+        summary {
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        ul {
+            li {
+                display: flex;
+                justify-content: start;
+                align-items: start;
+                padding-top: 1rem;
+                font-family: v.$font-mono;
+                @include m.tablet {
+                    font-size: 1.5rem;
+                    
+                };
+            }
+        }
+    }
+}
+
+.content-info {
+    position: absolute;
+
+    h2 {
+        font-size: 2.5rem;
+        padding: 0 2rem;
+        font-family: v.$font-sft-400;
+
+        @include m.tablet {
+            font-size: 4rem;
+        }
+    }
+}
+
+/*ARROW BUTTON */
+.arrow-button {
+    i {
+        font-size: 2rem;
+    }
+}
+
+/* VISTA & DESCRIPTION */
+.container-view-description {
+    background-color: v.$gray;
+
+    .info {
+        font-size: 1.5rem;
+
+        margin-left: auto;
+        margin-right: auto;
+        @include m.tablet {
+            max-width: 50%;
+            font-size: 2rem;
+        }
+    }
+}
+
+/* LOGO CLIENTES */
+.contain-clientes-crm {
+    .contain-image-logo {
+        width: 9.5rem;
+        height: 9.5rem;
+        background-color: gray;
+        border-radius: v.$border-radius;
+    }
+}
+
+
+.arrow-up {
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.arrow-up:hover {
+    opacity: 0.7;
+}
+
+.rotate-90 {
+    transform: rotate(0);
+    transition: transform 0.3s ease;
+}
+.rotate-0 {
+    transform: rotate(90deg);
+    transition: transform 0.3s ease;
+}
+
+.icon-file {
+    line-height: normal;
+}
+
+.title-crm {
+    font-size: 2rem;
+    font-family: v.$font-sft-500;
+    @include m.tablet {
+        font-size: 2.5rem;
+    }
+}
+
+/* FIX VIDEO */
+
+.contain-video {
+    height: 100vh;
+    position: relative;
+    z-index: 100;
+    &::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        z-index: 60;
+        background: rgba(0, 0, 0, 0.7);
+    }
+}
+
+.btn-modal-home {
+    padding: 1rem 5rem;
+    font-size: 1.6rem;
+    color: v.$white;
+    border: 1px solid #575756;
+    background: black;
+    font-family: v.$font-mono;
+    transition: 0.3s ease-in-out;
+
+    @include m.tablet {
+        padding: 2rem 10rem;
+        font-size: 2rem;        
+    }
+    &:hover {
+        background: v.$white !important;
+        color: black !important;
+    }
+}
+
+
+.h2-home-subtitle{
+    font-family: v.$font-mono;
+
+}

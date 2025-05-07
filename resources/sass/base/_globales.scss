@@ -1,0 +1,161 @@
+@use "./variables" as v;
+@use "../base/mixins" as m;
+
+:root {
+    --bs-card-inner-border-radius: 0 !important;
+}
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body{
+    //background-color: v.$bg-color-main;
+    min-height: 100vh;
+    font-size: 1.6rem;
+    font-family: v.$font-sft-400;
+    background-color: v.$black;
+    color: v.$white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: v.$font-mono;
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+    color: v.$white;
+}
+
+ul {
+    list-style: none;
+}
+
+p {
+    font-size: 1.6rem;
+
+    @include m.tablet {
+        font-size: 2rem;
+        
+    }
+}
+
+.max-width {
+    max-width: 1250px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.padding-y {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    @include m.tablet {
+        padding-top: 10rem;
+        padding-bottom: 10rem;
+    }
+}
+
+.white-2 {
+    color: v.$whitev2;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.gray2 {
+    color: v.$gray2;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.arrow-up {
+    font-size: 4rem;
+}
+
+/* FONT WEIGHT */
+.f-400 {
+    font-weight: 400 !important;
+}
+
+.f-500 {
+    font-weight: 500 !important;
+}
+
+.arrow-button {
+    font-size: 3rem;
+    font-weight: 400;
+}
+
+.border-radius {
+    border-radius: v.$border-radius !important;
+}
+
+.text-white {
+    color: white;
+}
+.text-gray {
+    color: gray;
+}
+
+.f-sft {
+    font-family: v.$font-sft-400 !important;
+}
+
+.white-3 {
+    color: v.$whitev3;
+}
+
+.f-mono {
+    $font-mono: "SFMono", sans-serif;
+}
+
+
+.title {
+    font-size: 3rem;
+    text-align: center;
+    max-width: 110rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "SFTSchriftedSans", sans-serif;
+    font-weight: 500;
+    @include m.tablet {
+        font-size: 5rem;
+    }
+}
+
+.p-10 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+.grecaptcha-badge {
+    z-index: 9999 !important;
+    
+}

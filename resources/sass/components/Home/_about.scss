@@ -1,0 +1,159 @@
+@use "../../base/variables" as v;
+@use "../../base/mixins" as m;
+
+.contain-about {
+    .title-about {
+        font-size: 3rem;
+        text-align: center;
+        max-width: 110rem;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: v.$font-sft-500;
+        font-weight: 500;
+
+        @include m.tablet {
+            font-size: 5rem;
+
+        }
+    }
+
+    p {
+        font-size: 1.6rem;
+        font-family: v.$font-sft-500;
+        font-weight: 400;
+        max-width: 80rem;
+
+        @include m.tablet {
+            font-size: 2.5rem;
+
+        }
+    }
+
+    .content-about {
+        position: relative;
+
+        @include m.tablet {
+            &:before {
+                content: "";
+                background-image: url(@images/about/principal.png);
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center center;
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        }
+
+        .img-dragon {
+            max-height: 30rem;
+            height: 30rem;
+            mask-image: linear-gradient(to top, transparent, black 35%, black);
+            -webkit-mask-image: linear-gradient(to top, transparent, black 35%, black);
+
+
+            @include m.tablet {
+                display: none;
+            }
+        }
+    }
+
+    .r-2 {
+        @include m.tablet {
+            margin-top: 15vh;
+        }
+    }
+
+    .r-1,
+    .r-2 {
+        z-index: 1;
+        position: relative;
+        p {
+            color: v.$gray-1;
+            font-size: 1.6rem;
+        }
+    }
+
+    .bloq-2,
+    .bloq-4 {
+        h2,
+        p {
+            @include m.tablet {
+                text-align: right;
+            }
+        }
+    }
+}
+
+.container-box-about {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: v.$gray-bg;
+
+    .row-about {
+        padding: 3rem;
+        @include m.tablet {
+            padding: 7rem;
+        }
+    }
+
+    p {
+        color: v.$gray-1;
+        font-size: 1.8rem;
+        max-width: initial;
+
+        @include m.tablet {
+            font-size: 2.2rem;
+        }
+    }
+}
+
+.arrow-right {
+    width: 50px;
+    //height: 50px;
+    display: block;
+}
+
+.button-box-gray {
+    width: 100%;
+    background-color: v.$gray-1;
+    padding: 1.5rem;
+
+    @include m.tablet {
+        width: 50%;
+        padding: 3rem;
+    }
+}
+
+.box-gray-tel {
+    color: v.$black;
+}
+
+/* ABOUT IMAGE CONTENT */
+
+.content-about {
+    padding-top: 0 !important;
+    @include m.tablet {
+        padding-top: 10rem !important;
+    }
+    .bloq-1,
+    .bloq-3 {
+        @include m.tablet {
+            padding-top: 6rem;
+        }
+    }
+}
+
+.content-about {
+    display: flex;
+    gap: 3rem;
+    flex-direction: column;
+
+    .r-1,
+    .r-2 {
+        display: flex;
+        gap: 3rem;
+    }
+}

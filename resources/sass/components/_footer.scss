@@ -1,0 +1,78 @@
+@use "../base/variables" as v;
+@use "../base/mixins" as m;
+
+.contain-footer {
+    background-color: #101010;
+
+    .title-1 {
+        color: #8e8e93;
+        font-size: 1.6rem;
+    }
+    span {
+        color: #575756;
+        font-weight: 500 !important;
+    }
+
+    .b-1 {
+        a,
+        span {
+            color: #8e8e93 !important;
+            font-weight: 500;
+        }
+    }
+}
+
+.icon-redes {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+.contain-politica {
+    .link-politica {
+        color: #8e8e93;
+        font-weight: 500;
+    }
+}
+
+.logo-footer-blackcat {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-height: 400px;
+    @include m.desktop {
+        max-height: 600px;
+    }
+}
+
+.contain-data-data {
+    padding-bottom: 5rem;
+}
+
+.b-1 {
+    display: inline-block;
+}
+
+.otpion-label {
+        &:hover {
+            color: v.$bg-hover;
+        }
+}
+
+
+.steps-contain-form {
+    label {
+        transition: .5s;
+        &:hover {
+            color: v.$bg-hover;
+        }
+    }
+}
