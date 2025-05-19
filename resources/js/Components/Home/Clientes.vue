@@ -114,12 +114,18 @@ onMounted(() => {
 .brand-showcase {
   position: relative;
   overflow: hidden;
-  /* Añadimos máscara de desvanecimiento */
   -webkit-mask-image: linear-gradient(
     to right,
-    transparent 1px,
+    transparent 0%,
     black 15%,
+    black 85%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
     black 15%,
+    black 85%,
     transparent 100%
   );
 }
@@ -136,7 +142,7 @@ onMounted(() => {
   width: max-content;
   gap: 0;
   transform-style: preserve-3d;
-  perspective: 2000px; /* añade perspectiva */
+  perspective: 1000px; /* añade perspectiva */
 }
 
 .group {
@@ -199,10 +205,34 @@ onMounted(() => {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 150px;
+  width: 200px; /* Aumentamos el ancho para mejor cobertura */
   pointer-events: none;
   z-index: 2;
 }
+
+.gradient-overlay.left {
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(22, 24, 22, 1) 0%,
+    rgba(22, 24, 22, 0.8) 30%,
+    rgba(22, 24, 22, 0.4) 60%,
+    rgba(22, 24, 22, 0) 100%
+  );
+}
+
+.gradient-overlay.right {
+  right: 0;
+  background: linear-gradient(
+    -90deg,
+    rgba(22, 24, 22, 1) 0%,
+    rgba(22, 24, 22, 0.8) 30%,
+    rgba(22, 24, 22, 0.4) 60%,
+    rgba(22, 24, 22, 0) 100%
+  );
+}
+
+
 
 
 .elipse1{
@@ -239,7 +269,7 @@ onMounted(() => {
   }
   
   .gradient-overlay {
-    width: 100px;
+    width: 150px;
   }
 }
 
@@ -259,7 +289,7 @@ onMounted(() => {
   }
   
   .gradient-overlay {
-    width: 60px;
+    width: 100px;
   }
   
   .control-btn {
@@ -281,7 +311,7 @@ onMounted(() => {
   }
   
   .gradient-overlay {
-    width: 40px;
+    width: 60px;
   }
 }
 </style>
