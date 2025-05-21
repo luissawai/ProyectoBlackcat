@@ -1,0 +1,522 @@
+{
+    "reformas": [
+      {
+        "value": "control_plazos",
+        "title": "Falta de control de plazos",
+        "description": "No se cumplen los tiempos previstos por mala planificación", 
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "presupuestos_inexactos",
+        "title": "Presupuestos inexactos",
+        "description": "Frecuentes desajustes entre lo estimado y lo real",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "coordinacion_proveedores",
+        "title": "Poca coordinación con proveedores",
+        "description": "Retrasos o problemas por falta de sincronización en entregas",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "seguimiento_clientes",
+        "title": "Falta de seguimiento al cliente",
+        "description": "Pérdida de oportunidades por falta de comunicación postventa",
+        "recommendedSolution": "CRM"
+      }
+    ],
+    "construccion": [
+      {
+        "value": "control_costes",
+        "title": "Falta de control de costes",
+        "description": "No se gestionan bien los materiales ni la mano de obra",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "planificacion_inadecuada",
+        "title": "Planificación inadecuada",
+        "description": "Descoordinación entre equipos y retrasos acumulados",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "gestion_rrhh",
+        "title": "Gestión deficiente de RRHH",
+        "description": "Turnos desorganizados y baja productividad en obra",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "reportes_manual",
+        "title": "Reportes manuales ineficientes",
+        "description": "Demoras en el análisis de avance de obra",
+        "recommendedSolution": "Microsoft Power BI"
+      }
+    ],
+    "inmobiliarias": [
+      {
+        "value": "seguimiento_leads",
+        "title": "Mal seguimiento de leads",
+        "description": "Se pierden oportunidades por falta de un sistema de gestión de clientes",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "gestion_contratos",
+        "title": "Gestión de contratos dispersa",
+        "description": "Problemas legales por falta de control documental",
+        "recommendedSolution": "Microsoft SharePoint"
+      },
+      {
+        "value": "agenda_visitas",
+        "title": "Agenda de visitas ineficiente",
+        "description": "Dificultad para coordinar citas con clientes e inmuebles",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "informes_comerciales",
+        "title": "Informes comerciales manuales",
+        "description": "Difícil evaluar desempeño del equipo de ventas",
+        "recommendedSolution": "Microsoft Power BI"
+      }
+    ],
+    "carpinteria": [
+      {
+        "value": "control_stock",
+        "title": "Falta de control de stock",
+        "description": "Faltantes de materiales o sobrecompras frecuentes",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "presupuestos_lentos",
+        "title": "Presupuestos lentos y poco precisos",
+        "description": "Se tarda en cotizar y se pierden ventas",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "planificacion_produccion",
+        "title": "Producción sin planificación",
+        "description": "Pedidos retrasados por falta de control del taller",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "facturacion_manual",
+        "title": "Facturación manual y errores",
+        "description": "Pérdida de tiempo y errores contables",
+        "recommendedSolution": "ERP"
+      }
+    ],
+    "fontaneria_electricidad": [
+      {
+        "value": "seguimiento_proyectos",
+        "title": "Mal seguimiento de obras y mantenimientos",
+        "description": "Clientes insatisfechos por falta de visibilidad de avances",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "gestiones_manual",
+        "title": "Gestiones manuales y papeleo",
+        "description": "Pérdida de tiempo administrativo sin digitalización",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "asignacion_tecnicos",
+        "title": "Asignación ineficiente de técnicos",
+        "description": "No se optimiza el tiempo ni recursos en campo",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "inventario",
+        "title": "Inventario sin control",
+        "description": "Faltan materiales o hay exceso sin registrar correctamente",
+        "recommendedSolution": "ERP"
+      }
+    ],
+    "jardineria": [
+      {
+        "value": "registro_clientes",
+        "title": "No tengo base de datos de clientes",
+        "description": "No puedo hacer seguimiento ni promociones efectivas",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "planificacion_servicios",
+        "title": "Mala planificación de servicios",
+        "description": "Rutas ineficientes o días mal organizados",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "presupuesto_manual",
+        "title": "Presupuestos manuales",
+        "description": "Errores y pérdida de tiempo en cotizaciones",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "reclamaciones_clientes",
+        "title": "Manejo poco ágil de reclamaciones",
+        "description": "Clientes molestos por demoras en la atención",
+        "recommendedSolution": "CRM"
+      }
+    ],
+    "refrigeracion_climatizacion": [
+      {
+        "value": "orden_trabajo",
+        "title": "Falta de orden en trabajos",
+        "description": "No se priorizan bien las urgencias ni mantenimientos",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "historial_clientes",
+        "title": "No tengo historial de clientes",
+        "description": "No se puede hacer seguimiento ni ofrecer upgrades",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "soporte_postventa",
+        "title": "Soporte técnico poco eficaz",
+        "description": "No hay trazabilidad de incidencias resueltas",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "control_facturacion",
+        "title": "Control deficiente de facturación",
+        "description": "Cobros atrasados o errores en importes",
+        "recommendedSolution": "ERP"
+      }
+    ],
+    "marketing_diseno": [
+      {
+        "value": "seguimiento_clientes",
+        "title": "No tengo seguimiento de clientes",
+        "description": "Pierdo oportunidades de venta recurrente",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "automatizacion",
+        "title": "Procesos manuales repetitivos",
+        "description": "Pierdo tiempo en tareas administrativas",
+        "recommendedSolution": "Microsoft Power Automate"
+      },
+      {
+        "value": "propuestas_lentas",
+        "title": "Envío lento de propuestas",
+        "description": "Demoro en enviar presupuestos a mis clientes",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "falta_erp",
+        "title": "No tengo ERP para gestión interna",
+        "description": "Dificultad para integrar proyectos, finanzas y tiempo",
+        "recommendedSolution": "ERP"
+      }
+    ],
+    "clinicas_dentales": [
+      {
+        "value": "agenda_pacientes",
+        "title": "Gestión caótica de citas",
+        "description": "Confusión en horarios y recordatorios",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "historiales",
+        "title": "Historiales médicos desorganizados",
+        "description": "No centralizo la info de pacientes",
+        "recommendedSolution": "Microsoft Dynamics 365"
+      },
+      {
+        "value": "seguimiento_tratamientos",
+        "title": "Falta seguimiento de tratamientos",
+        "description": "Pierdo fidelización y continuidad del paciente",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "facturacion",
+        "title": "Facturación poco transparente",
+        "description": "Errores o dudas del paciente al pagar",
+        "recommendedSolution": "ERP"
+      }
+    ],
+    "fisioterapia": [
+      {
+        "value": "agenda_desorganizada",
+        "title": "Agenda desorganizada",
+        "description": "Problemas al coordinar citas y disponibilidad del personal",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "seguimiento_pacientes",
+        "title": "Dificultad en el seguimiento de pacientes",
+        "description": "Falta de historial clínico digitalizado y actualizado",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "gestion_facturas",
+        "title": "Gestión manual de facturación",
+        "description": "Pérdida de tiempo en tareas administrativas",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "captacion_clientes",
+        "title": "Baja captación de nuevos clientes",
+        "description": "Falta de presencia digital y herramientas de marketing",
+        "recommendedSolution": "CRM"
+      }
+    ],
+    "logopedia_psicologia": [
+      {
+        "value": "documentacion_dispersa",
+        "title": "Información de pacientes dispersa",
+        "description": "No centralizo historiales ni avances terapéuticos",
+        "recommendedSolution": "Microsoft SharePoint"
+      },
+      {
+        "value": "agenda_confusa",
+        "title": "Problemas de agenda y coordinación",
+        "description": "Dificultad para organizar citas y disponibilidad",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "seguimiento_manual",
+        "title": "Seguimiento manual de terapias",
+        "description": "Tareas repetitivas sin digitalización ni automatización",
+        "recommendedSolution": "Microsoft Power Apps"
+      },
+      {
+        "value": "gestion_comercial",
+        "title": "Falta de estrategia comercial",
+        "description": "No tengo herramientas para fidelizar ni captar pacientes",
+        "recommendedSolution": "CRM"
+      }
+    ],
+    "bienestar_estetica": [
+      {
+        "value": "control_clientes",
+        "title": "Falta de control sobre la clientela",
+        "description": "No tengo una base de datos bien estructurada",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "agenda_conflictos",
+        "title": "Conflictos de agenda y reservas",
+        "description": "No puedo evitar citas superpuestas o vacías",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "promociones_desorden",
+        "title": "Gestión desordenada de promociones",
+        "description": "Pierdo oportunidades por campañas mal gestionadas",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "informes_inexistentes",
+        "title": "Falta de informes sobre ventas y servicios",
+        "description": "No sé qué servicios son los más rentables",
+        "recommendedSolution": "Microsoft Power BI"
+      }
+    ],
+    "academias_idiomas": [
+      {
+        "value": "control_asistencia",
+        "title": "Dificultad para llevar asistencia",
+        "description": "No registro correctamente la presencia de alumnos",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "seguimiento_estudiantes",
+        "title": "Falta de seguimiento académico",
+        "description": "No tengo un historial claro del progreso por alumno",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "gestion_cursos",
+        "title": "Gestión manual de cursos y grupos",
+        "description": "Mucho tiempo perdido en reorganizar horarios y grupos",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "comunicacion_clientes",
+        "title": "Comunicación deficiente con estudiantes",
+        "description": "No tengo herramientas centralizadas para comunicar cambios",
+        "recommendedSolution": "Microsoft Teams"
+      }
+    ],
+    "educacion_infantil": [
+      {
+        "value": "seguimiento_academico",
+        "title": "Seguimiento académico manual",
+        "description": "No tengo registros digitales del avance del alumnado",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "comunicacion_padres",
+        "title": "Comunicación limitada con padres",
+        "description": "No informo eficazmente sobre el progreso o incidencias",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "gestion_actividades",
+        "title": "Gestión ineficiente de actividades",
+        "description": "No hay un sistema claro para planificación o evaluación",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "baja_digitalizacion",
+        "title": "Bajo nivel de digitalización",
+        "description": "Demasiadas tareas se hacen en papel o Excel",
+        "recommendedSolution": "ERP"
+      }
+    ],
+    "formacion_profesional": [
+      {
+        "value": "inscripciones_manual",
+        "title": "Inscripción y matrícula manual",
+        "description": "Mucho tiempo invertido en procesos administrativos",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "sin_crm_alumnos",
+        "title": "No tengo un CRM para alumnos",
+        "description": "Pierdo oportunidades de fidelización o venta cruzada",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "informes_deficientes",
+        "title": "Informes académicos deficientes",
+        "description": "No tengo un sistema para generar reportes fácilmente",
+        "recommendedSolution": "Microsoft Power BI"
+      },
+      {
+        "value": "gestion_profesores",
+        "title": "Difícil gestión del personal docente",
+        "description": "No controlo horarios, cargas ni evaluaciones fácilmente",
+        "recommendedSolution": "ERP"
+      }
+    ],
+    "centros_especializados": [
+      {
+        "value": "gestion_integral",
+        "title": "Gestión integral poco eficiente",
+        "description": "Uso muchas herramientas separadas que no se integran",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "seguimiento_casos",
+        "title": "Seguimiento poco estructurado",
+        "description": "No tengo una ficha completa y accesible por caso",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "control_facturacion",
+        "title": "Facturación poco clara",
+        "description": "Errores o confusiones en cobros y tarifas personalizadas",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "reportes_limitados",
+        "title": "Limitada generación de informes",
+        "description": "No puedo evaluar resultados o desempeño con claridad",
+        "recommendedSolution": "Microsoft Power BI"
+      }
+    ],
+    "moda_complementos": [
+      {
+        "value": "stock_no_controlado",
+        "title": "Control de stock ineficiente",
+        "description": "Faltan productos o hay exceso de inventario",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "ventas_sin_analisis",
+        "title": "Ventas sin análisis",
+        "description": "No sé qué productos funcionan mejor",
+        "recommendedSolution": "Microsoft Power BI"
+      },
+      {
+        "value": "sin_crm_clientes",
+        "title": "No tengo CRM para mis clientes",
+        "description": "No tengo datos para campañas de fidelización",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "gestion_manual",
+        "title": "Gestión totalmente manual",
+        "description": "Vendo con métodos que me hacen perder tiempo y dinero",
+        "recommendedSolution": "ERP"
+      }
+    ],
+    "deportes_ocio": [
+      {
+        "value": "control_inventario",
+        "title": "Inventario desorganizado",
+        "description": "Faltan productos o se repiten pedidos innecesarios",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "reservas_manual",
+        "title": "Reservas de actividades sin sistema",
+        "description": "Confusiones con horarios, cupos y pagos",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "sin_datos_clientes",
+        "title": "Falta de datos sobre clientes",
+        "description": "No tengo una base para fidelizar o comunicar novedades",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "poca_visibilidad_online",
+        "title": "Poca visibilidad online",
+        "description": "No llego a nuevos públicos por falta de estrategia digital",
+        "recommendedSolution": "CRM"
+      }
+    ],
+    "belleza_cosmetica": [
+      {
+        "value": "citas_confusas",
+        "title": "Gestión de citas confusa",
+        "description": "Pierdo clientes por desorganización",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "ventas_no_analizadas",
+        "title": "No analizo mis ventas",
+        "description": "No sé qué servicios o productos funcionan mejor",
+        "recommendedSolution": "Microsoft Power BI"
+      },
+      {
+        "value": "clientes_sin_historial",
+        "title": "No tengo historial de clientes",
+        "description": "No adapto mis servicios a sus preferencias",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "control_productos",
+        "title": "Sin control sobre mis productos",
+        "description": "No gestiono correctamente stock de cosmética y consumibles",
+        "recommendedSolution": "ERP"
+      }
+    ],
+    "papeleria_regalos": [
+      {
+        "value": "inventario_confuso",
+        "title": "Inventario poco claro",
+        "description": "Desconozco niveles de stock o productos estancados",
+        "recommendedSolution": "ERP"
+      },
+      {
+        "value": "ventas_estacionales",
+        "title": "Altas y bajas en ventas no gestionadas",
+        "description": "No planifico campañas según la estacionalidad",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "clientes_sin_seg",
+        "title": "Clientes sin seguimiento",
+        "description": "No aprovecho las compras para generar recurrencia",
+        "recommendedSolution": "CRM"
+      },
+      {
+        "value": "gestion_manual",
+        "title": "Gestión manual y repetitiva",
+        "description": "Pierdo tiempo con tareas administrativas básicas",
+        "recommendedSolution": "ERP"
+      }
+    ]
+}

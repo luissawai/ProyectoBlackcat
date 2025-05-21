@@ -5,20 +5,20 @@
         <span>{{ currentCard + 1 }} / {{ chunkedCards.length }}</span>
       </div>
       <div name="stack-transition" tag="div" class="stack-container">
-        <template v-for="(card, cardIndex) in chunkedCards">
+        <template v-for="(card, cardIndex) in chunkedCards" :key="cardIndex">
           <!-- Tarjeta activa -->
           <div v-if="currentCard === cardIndex" :key="'active-' + cardIndex" class="card active-card"
             :style="{ zIndex: 10 }">
             <div class="card-content">
               <h2 class="title">{{ titles[currentCard] }}</h2>
               <p class="subtitle">{{ subtitles[currentCard] }}</p>
-              <!-- Opciones -->
+
+              <!-- Opciones dinámicas -->
               <div v-if="Array.isArray(card)" :class="['options-grid', currentCard === 4 ? 'one-column' : '']">
                 <div v-if="currentCard === 1 && dynamicOptionsCard2.length === 0" class="no-options-message">
                   <p>Por favor, selecciona una opción en el paso anterior para continuar.</p>
                   <button @click="prevCard" class="back-btn">Volver al paso anterior</button>
                 </div>
-                <!-- Dentro de la tarjeta activa, en las opciones de Card1 -->
                 <div v-else v-for="option in card" :key="option.value" class="option"
                   :class="{ selected: selectedOptions.includes(option.value) }" @click="toggleOption(option.value)">
                   <div class="checkbox-visual" :class="{ checked: selectedOptions.includes(option.value) }">
@@ -37,37 +37,33 @@
               </div>
 
               <!-- Formulario -->
-              <div v-else class="form-row" style="display: flex; gap: 24px;">
+              <div v-else-if="currentCard === chunkedCards.length - 1" class="form-row" style="display: flex; gap: 24px;">
                 <div class="form col-left" style="flex: 1;">
-                  <!-- Formulario -->
-
-                  <div class="form col-left" style="flex: 1;">
-                    <div class="form-group">
-                      <label>Nombre</label>
-                      <input type="text" v-model="contact.name" placeholder="Escribe tu nombre" />
-                    </div>
-                    <div class="form-group">
-                      <label>Correo electrónico</label>
-                      <input type="email" v-model="contact.email" placeholder="Escribe tu correo electrónico" />
-                    </div>
-                    <div class="form-group">
-                      <label>Teléfono</label>
-                      <input type="tel" v-model="contact.phone" placeholder="Introduce tu número de contacto" />
-                    </div>
-                    <div class="form-group">
-                      <label>Mensaje</label>
-                      <textarea v-model="contact.message" rows="3" placeholder="Escribe tú mensaje" />
-                    </div>
-                    <!-- Checkbox horizontal -->
-                    <div class="checkbox-row">
-                      <input type="checkbox" id="privacy" v-model="acceptedPrivacy" />
-                      <label for="privacy">
-                        He leído y acepto la
-                        <a href="/politica-de-privacidad" target="_blank" class="privacy-link">
-                          Política de Privacidad
-                        </a>
-                      </label>
-                    </div>
+                  <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" v-model="contact.name" placeholder="Escribe tu nombre" />
+                  </div>
+                  <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" v-model="contact.email" placeholder="Escribe tu correo electrónico" />
+                  </div>
+                  <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" v-model="contact.phone" placeholder="Introduce tu número de contacto" />
+                  </div>
+                  <div class="form-group">
+                    <label>Mensaje</label>
+                    <textarea v-model="contact.message" rows="3" placeholder="Escribe tú mensaje"></textarea>
+                  </div>
+                  <!-- Checkbox horizontal -->
+                  <div class="checkbox-row">
+                    <input type="checkbox" id="privacy" v-model="acceptedPrivacy" />
+                    <label for="privacy">
+                      He leído y acepto la
+                      <a href="/politica-de-privacidad" target="_blank" class="privacy-link">
+                        Política de Privacidad
+                      </a>
+                    </label>
                   </div>
                 </div>
                 <div class="col-right" style="flex: 1; display: flex; justify-content: center; align-items: center;">
@@ -107,8 +103,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { ref, computed, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
+import challengesData from './Challenges.json';
 import image from '@images/about/principal.png';
 
 const currentCard = ref(0);
@@ -221,15 +218,6 @@ const optionsCard2BySelection = {
   ],
 };
 
-const optionsCard3 = [
-  { value: 'procesos internos ineficientes', title: 'Procesos internos ineficientes', description: 'Tareas manuales, duplicación de esfuerzos o falta de automatzación' },
-  { value: 'gestión comercial desorganizada', title: 'Gestión comercial desorganizada', description: 'Dificultad para seguir opotunidades, clientes y ventas' },
-  { value: 'migracion a la nube', title: 'Migración a la nube', description: 'Transición desde sistemas locales o anticuados a soluciones modernas' },
-  { value: 'crecimiento sin estructura', title: 'Crecimiento sin estructura', description: 'Expansión ràpida con sistemas que acompañen el crecimiento' },
-  { value: 'falta de visibilidad de datos', title: 'Falta de visibilidad de datos', description: 'Información dispersa o falta de reportes para tomar desiciones' },
-  { value: 'sistemas antiguos o desconectados', title: 'Sistemas antiguos o desconectados', description: 'Herramientas que no se integran o ya no cubren las necesidades' },
-]
-
 const optionsCard4 = [
   { value: 'alta dirección', title: 'Alta Dirección', description: 'Soy responsable de elegir o aprobar soluciones' },
   { value: 'área operativa o administrativa', title: 'Área operativa o administrativa', description: 'Uso de herramientas en el día a día para gestionar tareas' },
@@ -251,16 +239,28 @@ const contact = ref({
   priority: 'media',
 })
 
+const dynamicOptionsCard3 = computed(() => {
+  if (selectedOptions.value.length > 0) {
+    const selectedCard2Value = selectedOptions.value[0]; // Solo se permite una selección en Card2
+    return challengesData[selectedCard2Value] || [];
+  }
+  return [];
+});
+
 const chunkedCards = computed(() => {
   const cards = [optionsCard1];
-  
-  // Siempre usar dynamicOptionsCard2 para la Card 2
+
+  // Card 2
   cards.push(dynamicOptionsCard2.value);
-  
-  // Añadir el resto de tarjetas
-  cards.push(optionsCard3);
+
+  // Card 3 (dinámica)
+  cards.push(dynamicOptionsCard3.value);
+
+  // Card 4 y 5
   cards.push(optionsCard4);
   cards.push(optionsCard5);
+
+  // Formulario final
   cards.push('form');
 
   return cards;
@@ -283,16 +283,30 @@ function getStackStyle(offset) {
 }
 
 function toggleOption(value) {
+  console.log('🖱 toggleOption:', value);
+
   const isSelected = selectedOptions.value.includes(value);
 
   if (currentCard.value === 0) {
-    // Actualizar card1Selection con el título de la opción seleccionada
     const selectedOption = optionsCard1.find(opt => opt.value === value);
     card1Selection.value = isSelected ? null : selectedOption.title;
     selectedOptions.value = isSelected ? [] : [value];
     card2Selections.value = [];
+
+    // Si selecciona "otros", limpiar el texto anterior
+    if (value === 'otros' && !isSelected) {
+      otrosSectorTexto.value = '';
+    }
+  } else if (currentCard.value === 1) {
+    // Actualiza card2Selections en la tarjeta 2
+    card2Selections.value = isSelected
+      ? []
+      : [value];
+    selectedOptions.value = isSelected
+      ? []
+      : [value];
   } else {
-    const cardLimit = currentCard.value === 2 ? 3 : 1; // Límite de 3 para tarjeta 3, 1 para las demás
+    const cardLimit = currentCard.value === 2 ? 3 : 1;
     if (isSelected) {
       selectedOptions.value = selectedOptions.value.filter(v => v !== value);
     } else if (cardLimit === 1) {
@@ -301,8 +315,15 @@ function toggleOption(value) {
       selectedOptions.value.push(value);
     }
   }
+
+  console.log('🎯 selectedOptions después del toggle:', selectedOptions.value);
+  console.log('🎯 card2Selections después del toggle:', card2Selections.value);
 }
 
+watch(card2Selections, (val) => {
+  console.log('✅ card2Selections actualizado:', val);
+  chunkedCards.value = [...chunkedCards.value]; // Forzar actualización
+});
 
 function nextCard() {
   // Si estamos en la Card1 y seleccionó "otros", saltar Card2
@@ -323,7 +344,7 @@ function nextCard() {
 function prevCard() {
   if (currentCard.value === 0) {
     // Guardar posición actual antes de navegar
-    savedScrollPosition.value = window.pageYOffset || document.documentElement.scrollTop
+    savedScrollPosition.value = window.pageYOffset || document.documentElement.scrollTop;
 
     router.visit('/#formulario', {
       preserveScroll: true,
@@ -331,11 +352,11 @@ function prevCard() {
         setTimeout(() => {
           window.scrollTo({
             top: savedScrollPosition.value,
-            behavior: 'auto'
-          })
-        }, 50)
-      }
-    })
+            behavior: 'auto',
+          });
+        }, 50);
+      },
+    });
   } else {
     // Si estamos en Card3 y venimos de "otros", volver a Card1
     if (
@@ -349,39 +370,101 @@ function prevCard() {
       return;
     }
 
-    if (currentCard.value === 2) {
-      // Si volvemos de la tarjeta 3 a la 2, restauramos las selecciones de la tarjeta 2
+    if (currentCard.value === 3) {
+      // Si volvemos de la tarjeta 4 a la tarjeta 3, restaurar las selecciones originales de la tarjeta 3
+      selectedOptions.value = [...card2Selections.value];
+      console.log('🔄 Restaurando selecciones de la tarjeta 3:', selectedOptions.value);
+    } else if (currentCard.value === 2) {
+      // Si volvemos de la tarjeta 3 a la tarjeta 2, restauramos las selecciones de la tarjeta 2
       selectedOptions.value = [...card2Selections.value];
     } else {
       // Para otros casos, limpiamos las selecciones
       selectedOptions.value = [];
     }
+
     currentCard.value--;
   }
 }
 
 function isNextDisabled() {
-  const current = chunkedCards.value[currentCard.value]
-  // Si está en Card1 y seleccionó "otros", requiere texto
-  if (currentCard.value === 0 && selectedOptions.value[0] === 'otros') {
-    return !otrosSectorTexto.value;
+  const current = chunkedCards.value[currentCard.value];
+
+  // Si está en Card2, requiere al menos una opción seleccionada
+  if (currentCard.value === 1) {
+    return selectedOptions.value.length === 0 || dynamicOptionsCard2.value.length === 0;
   }
+
   if (Array.isArray(current)) {
-    return selectedOptions.value.length === 0
+    return selectedOptions.value.length === 0;
   } else {
-    return !contact.value.name || !contact.value.email || !contact.value.phone || !acceptedPrivacy.value
+    return !contact.value.name || !contact.value.email || !contact.value.phone || !acceptedPrivacy.value;
   }
 }
 
 function submit() {
-  router.visit('/siguiente-ruta', {
-    data: {
-      selectedOptions: selectedOptions.value,
-      otrosTexto: otrosTexto.value,
-      otrosSectorTexto: otrosSectorTexto.value, // <-- Añadido
-      contact: contact.value,
+  // Preparar los datos del formulario
+  const formData = {
+    // Datos de selección
+    sector: card1Selection.value,
+    tipoEmpresa: card2Selections.value[0],
+    desafios: selectedOptions.value,
+    rol: currentCard.value === 3 ? selectedOptions.value[0] : null,
+    momentoContacto: currentCard.value === 4 ? selectedOptions.value[0] : null,
+
+    // Datos de contacto
+    contacto: {
+      ...contact.value,
+      otrosSectorTexto: otrosSectorTexto.value,
+      acceptedPrivacy: acceptedPrivacy.value
     },
-  })
+
+    // Metadata
+    metadata: {
+      fechaEnvio: new Date().toISOString(),
+      origen: 'formulario-web'
+    }
+  };
+
+  console.log('📤 Enviando formulario:', formData);
+
+  // Enviar los datos usando Inertia
+  router.post('/api/contact/submit', formData, {
+    preserveScroll: true,
+    onBefore: () => {
+      // Validaciones adicionales antes del envío
+      if (!formData.contacto.name || !formData.contacto.email || !formData.contacto.phone) {
+        console.error('❌ Faltan campos requeridos');
+        return false;
+      }
+      return true;
+    },
+    onSuccess: () => {
+      console.log('✅ Formulario enviado correctamente');
+      // Limpiar el formulario
+      selectedOptions.value = [];
+      card1Selection.value = null;
+      card2Selections.value = [];
+      otrosSectorTexto.value = '';
+      contact.value = {
+        name: '',
+        phone: '',
+        email: '',
+        message: '',
+        priority: 'media'
+      };
+      acceptedPrivacy.value = false;
+      
+      // Redirigir a la página de agradecimiento
+      router.visit('/gracias', {
+        preserveScroll: true
+      });
+    },
+    onError: (errors) => {
+      console.error('❌ Error al enviar el formulario:', errors);
+      // Aquí puedes manejar los errores específicos
+      // Por ejemplo, mostrar un mensaje de error al usuario
+    }
+  });
 }
 
 const dynamicOptionsCard2 = computed(() => {
