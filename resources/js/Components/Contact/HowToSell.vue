@@ -401,70 +401,77 @@ function isNextDisabled() {
   }
 }
 
-function submit() {
-  // Preparar los datos del formulario
+const submit = () => {
+  // Preparar los datos según lo esperado por el backend
   const formData = {
-    // Datos de selección
-    sector: card1Selection.value,
-    tipoEmpresa: card2Selections.value[0],
-    desafios: selectedOptions.value,
+    // Datos de selección (ajustados a snake_case)
+    tipo_empresa: card1Selection.value,
+    producto_interesado: card2Selections.value[0],
+    desafios: selectedOptions.value.join(', '), // Convertir array a string
     rol: currentCard.value === 3 ? selectedOptions.value[0] : null,
-    momentoContacto: currentCard.value === 4 ? selectedOptions.value[0] : null,
+    momento_contacto: currentCard.value === 4 ? selectedOptions.value[0] : null,
 
-    // Datos de contacto
-    contacto: {
-      ...contact.value,
-      otrosSectorTexto: otrosSectorTexto.value,
-      acceptedPrivacy: acceptedPrivacy.value
-    },
+    // Datos de contacto (mapeados a los campos del backend)
+    empresa: contact.value.company || '',
+    nombre: contact.value.name || '',
+    correo: contact.value.email || '',
+    telefono: contact.value.phone || '',
+    provincia: contact.value.province || '',
+    localidad: contact.value.location || '',
+    mensaje: contact.value.message || '',
+    otros_sector: otrosSectorTexto.value || '',
 
-    // Metadata
-    metadata: {
-      fechaEnvio: new Date().toISOString(),
-      origen: 'formulario-web'
-    }
-  };
+    // Política de privacidad
+    accepted_privacy: acceptedPrivacy.value,
+  }
 
-  console.log('📤 Enviando formulario:', formData);
-
-  // Enviar los datos usando Inertia
-  router.post('/api/contact/submit', formData, {
+  // Usar Inertia.js para el envío del formulario
+  router.post('/formulario-contacto', formData, {
     preserveScroll: true,
-    onBefore: () => {
-      // Validaciones adicionales antes del envío
-      if (!formData.contacto.name || !formData.contacto.email || !formData.contacto.phone) {
-        console.error('❌ Faltan campos requeridos');
-        return false;
-      }
-      return true;
-    },
     onSuccess: () => {
-      console.log('✅ Formulario enviado correctamente');
-      // Limpiar el formulario
-      selectedOptions.value = [];
-      card1Selection.value = null;
-      card2Selections.value = [];
-      otrosSectorTexto.value = '';
-      contact.value = {
-        name: '',
-        phone: '',
-        email: '',
-        message: '',
-        priority: 'media'
-      };
-      acceptedPrivacy.value = false;
+      // Resetear el formulario después de un envío exitoso
+      resetForm()
       
-      // Redirigir a la página de agradecimiento
-      router.visit('/gracias', {
-        preserveScroll: true
-      });
+      // Mostrar notificación de éxito (puedes usar tu sistema de notificaciones)
+      showNotification('¡Formulario enviado con éxito!', 'success')
     },
     onError: (errors) => {
-      console.error('❌ Error al enviar el formulario:', errors);
-      // Aquí puedes manejar los errores específicos
-      // Por ejemplo, mostrar un mensaje de error al usuario
+      // Mostrar errores de validación
+      if (Object.keys(errors).length > 0) {
+        showNotification('Por favor, corrige los errores en el formulario', 'error')
+      } else {
+        showNotification('Ocurrió un error al enviar el formulario', 'error')
+      }
+    },
+    onFinish: () => {
+      // Cualquier lógica que deba ejecutarse siempre al finalizar
     }
-  });
+  })
+}
+
+const resetForm = () => {
+  card1Selection.value = ''
+  card2Selections.value = []
+  selectedOptions.value = []
+  currentCard.value = 1
+  contact.value = {
+    company: '',
+    name: '',
+    email: '',
+    phone: '',
+    province: '',
+    location: '',
+    message: ''
+  }
+  otrosSectorTexto.value = ''
+  acceptedPrivacy.value = false
+}
+
+const showNotification = (message, type = 'success') => {
+  // Aquí puedes integrar tu sistema de notificaciones (Toast, SweetAlert, etc.)
+  console.log(`${type.toUpperCase()}: ${message}`)
+  // Ejemplo con alerta básica:
+  alert(`${type === 'error' ? 'Error' : 'Éxito'}: ${message}`)
 }
 
 const dynamicOptionsCard2 = computed(() => {

@@ -17,8 +17,7 @@ Route::get('/politica-privacidad', [PoliticasController::class, 'privacidad'])->
 Route::get('/politica-cookies', [PoliticasController::class, 'cookies'])->name('cookies');
 Route::get('/aviso-legal', [PoliticasController::class, 'aviso_legal'])->name('aviso-legal');
 Route::post('/contact', [ContactController::class, 'store'])->name('public.contact.store');
-Route::get('/formulario-contacto', [ContactController::class, 'show'])->name('formulario.contacto');
-
+Route::post('/formulario-contacto', [ContactController::class, 'store'])->name('formulario.store');
 
 
 Route::middleware('auth')->group(function () {
