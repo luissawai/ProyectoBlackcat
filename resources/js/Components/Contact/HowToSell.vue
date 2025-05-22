@@ -16,44 +16,47 @@
               <!-- Opciones dinámicas -->
               <div v-if="Array.isArray(card)" :class="['options-grid', currentCard === 4 ? 'one-column' : '']">
                 <!-- Caso especial para "otros" en la tarjeta 3 -->
-                <div v-if="currentCard === 2 && selectedOptions.includes('otros')" class="otros-desafios">
+                <div v-if="currentCard === 2 && card3Selection.includes('otros')" class="otros-desafios">
                   <h3>Cuéntanos los desafíos de tu empresa</h3>
-                  <textarea 
-                    v-model="otrosDesafiosTexto" 
-                    rows="4"
-                    placeholder="Describe los principales desafíos que enfrenta tu empresa..."
-                    class="otros-textarea">
-                  </textarea>
+                  <textarea v-model="otrosDesafiosTexto" class="otros-textarea" rows="4"
+                    placeholder="Describe los principales desafíos que enfrenta tu empresa..."></textarea>
                 </div>
                 <!-- Opciones normales para otros casos -->
-                <div v-else v-for="option in card" :key="option.value" class="option"
-                  :class="{ selected: selectedOptions.includes(option.value) }" 
-                  @click="toggleOption(option.value)">
-                  <div class="checkbox-visual" :class="{ checked: selectedOptions.includes(option.value) }">
-                    <span v-if="selectedOptions.includes(option.value)">✓</span>
+                <div v-else v-for="option in card" :key="option.value" class="option" :class="{
+                  selected: (currentCard === 0 && card1Selection === option.value) ||
+                    (currentCard === 1 && card2Selection.includes(option.value)) ||
+                    (currentCard === 2 && card3Selection.includes(option.value)) ||
+                    (currentCard === 3 && card4Selection.includes(option.value)) ||
+                    (currentCard === 4 && card5Selection.includes(option.value))
+                }" @click="toggleOption(option.value)">
+                  <div class="checkbox-visual" :class="{
+                    checked: (currentCard === 0 && card1Selection === option.value) ||
+                      (currentCard === 1 && card2Selection.includes(option.value)) ||
+                      (currentCard === 2 && card3Selection.includes(option.value)) ||
+                      (currentCard === 3 && card4Selection.includes(option.value)) ||
+                      (currentCard === 4 && card5Selection.includes(option.value))
+                  }">
+                    <span v-if="(currentCard === 0 && card1Selection === option.value) ||
+                      (currentCard === 1 && card2Selection.includes(option.value)) ||
+                      (currentCard === 2 && card3Selection.includes(option.value)) ||
+                      (currentCard === 3 && card4Selection.includes(option.value)) ||
+                      (currentCard === 4 && card5Selection.includes(option.value))">✓</span>
                   </div>
                   <div class="text">
                     <strong>{{ option.title }}</strong>
                     <p>{{ option.description }}</p>
                     <!-- Campo de texto para otros en Card 1 -->
-                    <div v-if="option.value === 'otros' && selectedOptions.includes('otros') && currentCard === 0" 
-                         class="otros-input">
-                      <input 
-                        type="text" 
-                        v-model="otrosSectorTexto" 
-                        placeholder="Especifica tu sector y tipo de empresa"
-                        @click.stop 
-                      />
+                    <div v-if="option.value === 'otros' && card1Selection === 'otros' && currentCard === 0"
+                      class="otros-input">
+                      <input type="text" v-model="otrosSectorTexto" placeholder="Especifica tu sector y tipo de empresa"
+                        @click.stop />
                     </div>
                     <!-- Campo de texto para otros_rol en Card 4 -->
-                    <div v-if="option.value === 'otros_rol' && selectedOptions.includes('otros_rol') && currentCard === 3" 
-                         class="otros-input">
-                      <input 
-                        type="text" 
-                        v-model="otrosRolTexto" 
-                        placeholder="Especifica tu rol en la empresa"
-                        @click.stop 
-                      />
+                    <div
+                      v-if="option.value === 'otros_rol' && card4Selection.includes('otros_rol') && currentCard === 3"
+                      class="otros-input">
+                      <input type="text" v-model="otrosRolTexto" placeholder="Especifica tu rol en la empresa"
+                        @click.stop />
                     </div>
                   </div>
                 </div>
@@ -100,26 +103,17 @@
 
               <!-- Botones de navegación -->
               <div class="buttons">
-                <button 
-                  @click="prevCard" 
-                  :disabled="isTransitioning || currentCard === 0"
-                  :class="{ 'transitioning': isTransitioning }"
-                  class="nav-button prev-button">
+                <button @click="prevCard" :disabled="isTransitioning || currentCard === 0"
+                  :class="{ 'transitioning': isTransitioning }" class="nav-button prev-button">
                   ← Atrás
                 </button>
-                <button 
-                  v-if="currentCard < chunkedCards.length - 1" 
-                  @click="nextCard" 
-                  :disabled="isTransitioning || isNextDisabled()"
-                  :class="{ 'transitioning': isTransitioning }"
+                <button v-if="currentCard < chunkedCards.length - 1" @click="nextCard"
+                  :disabled="isTransitioning || isNextDisabled()" :class="{ 'transitioning': isTransitioning }"
                   class="nav-button next-button">
                   Siguiente →
                 </button>
-                <button 
-                  v-if="currentCard === chunkedCards.length - 1" 
-                  @click="submit" 
-                  :disabled="isTransitioning || isNextDisabled()"
-                  :class="{ 'transitioning': isTransitioning }"
+                <button v-if="currentCard === chunkedCards.length - 1" @click="submit"
+                  :disabled="isTransitioning || isNextDisabled()" :class="{ 'transitioning': isTransitioning }"
                   class="nav-button submit-button">
                   Enviar
                 </button>
@@ -148,6 +142,10 @@ import image from '@images/about/principal.png';
 
 const currentCard = ref(0);
 const card1Selection = ref(null);
+const card2Selection = ref([]);
+const card3Selection = ref([]); // Para desafíos
+const card4Selection = ref([]); // Para rol
+const card5Selection = ref([]); // Para momento de contacto
 const selectedOptions = ref([]);
 const card2Selections = ref([]);
 const isTransitioning = ref(false);
@@ -175,17 +173,6 @@ const subtitles = [
   'No te preocupes, no te vamos a llenar de correos ni llamadas innecesarias',
   'Tus datos estan seguros. No los compartiremos ni usaremos sin tu permiso',
 ]
-
-const sectorKeyMap = {
-  'Construcción e Inmobiliaria': 'construccion',
-  'Servicios Profesionales': 'servicios',
-  'Salud y Bienestar': 'salud',
-  'Educación y Formación': 'educacion',
-  'Hostelería y Turismo': 'hosteleria',
-  'Industria y Manufactura': 'industria',
-  'Logística y Transporte': 'logistica',
-  'otros': null,
-};
 
 const optionsCard1 = [
   {
@@ -319,17 +306,31 @@ const contact = ref({
   priority: 'media',
 })
 
-const dynamicOptionsCard3 = computed(() => {
-  console.log('Card2Selections:', card2Selections.value);
-  
-  // Si estamos en Card3 y tenemos una selección de Card2
-  if (currentCard.value === 2 && card2Selections.value.length > 0) {
-    const selectedType = card2Selections.value[0];
-    console.log('Tipo seleccionado:', selectedType);
-    console.log('Desafíos disponibles:', challengesData[selectedType]);
-    return challengesData[selectedType] || [];
+const dynamicOptionsCard2 = computed(() => {
+  console.log('Calculando opciones Card2 para sector:', card1Selection.value);
+
+  if (card1Selection.value) {
+    // Usar directamente el valor seleccionado como clave
+    const options = optionsCard2BySelection[card1Selection.value];
+    console.log('Opciones encontradas:', options);
+    return options || [];
   }
-  
+  return [];
+});
+
+const dynamicOptionsCard3 = computed(() => {
+  if (currentCard.value === 2) {
+    if (card1Selection.value === 'otros') {
+      // Retornar un array vacío para mostrar solo el textarea
+      return [];
+    } else if (card2Selection.value.length > 0) {
+      const selectedType = card2Selection.value[0];
+      console.log('Tipo seleccionado para desafíos:', selectedType);
+      const desafios = challengesData[selectedType] || [];
+      console.log('Desafíos encontrados:', desafios);
+      return desafios;
+    }
+  }
   return [];
 });
 
@@ -340,7 +341,7 @@ const chunkedCards = computed(() => {
   // Card 2
   cards.push(dynamicOptionsCard2.value);
 
-  // Card 3 (dinámica)
+  // Card 3 - Desafíos
   cards.push(dynamicOptionsCard3.value);
 
   // Card 4 y 5
@@ -370,90 +371,109 @@ function getStackStyle(offset) {
 }
 
 function toggleOption(value) {
-  const isSelected = selectedOptions.value.includes(value);
-
   if (currentCard.value === 0) {
-    // Lógica para Card 1
+    // Card 1 - Sector
     const selectedOption = optionsCard1.find(opt => opt.value === value);
-    card1Selection.value = isSelected ? null : selectedOption.title;
-    selectedOptions.value = isSelected ? [] : [value];
-    card2Selections.value = [];
+    card1Selection.value = selectedOption.value;
+    selectedOptions.value = [value];
 
-    // Solo limpiar otrosSectorTexto cuando corresponda
-    if (value === 'otros' && !isSelected) {
-      otrosSectorTexto.value = '';
-    }
+    // Limpiar selecciones posteriores
+    card2Selection.value = [];
+    card3Selection.value = [];
+    card2Selections.value = [];
+    otrosDesafiosTexto.value = '';
+
+    console.log('Card 1 selección:', {
+      card1Selection: card1Selection.value,
+      selectedOptions: selectedOptions.value
+    });
   } else if (currentCard.value === 1) {
-    // Lógica para Card 2 (sin cambios)
-    card2Selections.value = isSelected ? [] : [value];
-    selectedOptions.value = isSelected ? [] : [value];
-  } else if (currentCard.value === 2) {
-    const maxDesafios = 2;
+    // Card 2 - Tipo de empresa
+    const isSelected = card2Selection.value.includes(value);
+
     if (isSelected) {
-      selectedOptions.value = selectedOptions.value.filter(v => v !== value);
-    } else if (selectedOptions.value.length < maxDesafios) {
-      selectedOptions.value.push(value);
-    }
-  }else if (currentCard.value === 3) {
-    // Lógica específica para Card 4
-    if (value === 'otros_rol') { // Notar el nuevo value
-      if (!isSelected) {
-        selectedOptions.value = [value];
-        otrosRolTexto.value = ''; // Limpiar el texto del rol
-      } else {
-        selectedOptions.value = [];
-      }
+      card2Selection.value = [];
+      card2Selections.value = [];
     } else {
-      selectedOptions.value = [value];
-      otrosRolTexto.value = ''; // Limpiar el texto del rol al seleccionar otra opción
+      card2Selection.value = [value];
+      card2Selections.value = [value];
     }
-  } else {
-    // Lógica para otras cards
-    const cardLimit = currentCard.value === 2 ? 3 : 1;
-    if (isSelected) {
-      selectedOptions.value = selectedOptions.value.filter(v => v !== value);
-    } else if (cardLimit === 1) {
-      selectedOptions.value = [value];
-    } else if (selectedOptions.value.length < cardLimit) {
-      selectedOptions.value.push(value);
+
+    selectedOptions.value = card2Selection.value;
+
+    // Limpiar selecciones de desafíos cuando cambia el tipo de empresa
+    card3Selection.value = [];
+    otrosDesafiosTexto.value = '';
+
+    console.log('Card 2 selección:', {
+      card2Selection: card2Selection.value,
+      card2Selections: card2Selections.value
+    });
+  } else if (currentCard.value === 2) {
+    // Card 3 - Desafíos
+    const maxDesafios = 3;
+
+    if (card1Selection.value === 'otros') {
+      // Caso especial para sector "otros"
+      otrosDesafiosTexto.value = otrosDesafiosTexto.value || '';
+      card3Selection.value = ['otros'];
+    } else {
+      // Manejo normal de desafíos
+      const isSelected = card3Selection.value.includes(value);
+
+      if (isSelected) {
+        card3Selection.value = card3Selection.value.filter(v => v !== value);
+      } else if (card3Selection.value.length < maxDesafios) {
+        card3Selection.value.push(value);
+      }
     }
+
+    selectedOptions.value = [...card3Selection.value];
+
+    console.log('Card 3 selección:', {
+      card3Selection: card3Selection.value,
+      selectedOptions: selectedOptions.value
+    });
+  } else if (currentCard.value === 3) {
+    // Card 4 - Rol
+    if (value === 'otros_rol') {
+      card4Selection.value = ['otros_rol'];
+      otrosRolTexto.value = '';
+    } else {
+      card4Selection.value = [value];
+      otrosRolTexto.value = '';
+    }
+    selectedOptions.value = card4Selection.value;
+  } else if (currentCard.value === 4) {
+    // Card 5 - Momento de contacto
+    card5Selection.value = [value];
+    selectedOptions.value = [value];
   }
 }
 
-watch(card2Selections, (val) => {
-  console.log('✅ card2Selections actualizado:', val);
-  chunkedCards.value = [...chunkedCards.value]; // Forzar actualización
+watch(card2Selection, (newValue) => {
+  console.log('card2Selection cambió:', newValue);
+  if (newValue.length > 0) {
+    // Forzar actualización de las opciones de desafíos
+    chunkedCards.value = [...chunkedCards.value];
+  }
 });
 
 function nextCard() {
   if (isTransitioning.value) return;
   isTransitioning.value = true;
 
-  // Si estamos en la Card1 y seleccionó "otros", saltar a Card4
-  if (currentCard.value === 0 && selectedOptions.value[0] === 'otros') {
-    currentCard.value = 3; // Ir a Card4
-    selectedOptions.value = []; // Limpiar selecciones
+  // Si estamos en Card1 y se seleccionó "otros"
+  if (currentCard.value === 0 && card1Selection.value === 'otros') {
+    currentCard.value = 2; // Saltar a Card3
+    selectedOptions.value = ['otros'];
+    card3Selection.value = ['otros'];
     isTransitioning.value = false;
     return;
   }
 
   if (currentCard.value < chunkedCards.value.length - 1) {
-    // Guardar selección de Card2 antes de avanzar
-    if (currentCard.value === 1) {
-      card2Selections.value = [...selectedOptions.value];
-    }
-
-    // Limpiar selecciones al avanzar
-    selectedOptions.value = [];
-    
-    // Avanzar a la siguiente tarjeta
     currentCard.value++;
-
-    // Si estamos en Card2 y vamos a Card3, cargar los desafíos
-    if (currentCard.value === 2 && card2Selections.value.length > 0) {
-      // Los desafíos se cargarán automáticamente por el computed dynamicOptionsCard3
-      console.log('Cargando desafíos para:', card2Selections.value[0]);
-    }
   }
 
   setTimeout(() => {
@@ -462,12 +482,11 @@ function nextCard() {
 }
 
 function prevCard() {
-  // Prevenir múltiples clicks
   if (isTransitioning.value) return;
   isTransitioning.value = true;
 
   if (currentCard.value === 0) {
-    savedScrollPosition.value = window.pageYOffset || document.documentElement.scrollTop;
+    // Lógica existente para volver al inicio
     router.visit('/#formulario', {
       preserveScroll: true,
       onSuccess: () => {
@@ -483,82 +502,93 @@ function prevCard() {
     return;
   }
 
-  // Si estamos en Card4 y venimos de "otros"
-  if (currentCard.value === 3 && card1Selection.value === 'Otros Sectores') {
-    currentCard.value = 0; // Volver a Card1
-    selectedOptions.value = ['otros']; // Mantener selección de "otros" en Card1
+  // Si estamos en Card3 y venimos de "otros" en sector
+  if (currentCard.value === 2 && card1Selection.value === 'otros') {
+    currentCard.value = 0;
+    selectedOptions.value = ['otros'];
     isTransitioning.value = false;
     return;
   }
 
-  // Para otros casos
-  if (currentCard.value === 2) {
-    selectedOptions.value = [...card2Selections.value];
-  } else {
-    selectedOptions.value = [];
+  currentCard.value--;
+
+  // Restaurar selecciones según la tarjeta
+  if (currentCard.value === 0) {
+    selectedOptions.value = [card1Selection.value];
+  } else if (currentCard.value === 2 && card1Selection.value === 'otros') {
+    selectedOptions.value = ['otros'];
+    card3Selection.value = ['otros'];
   }
 
-  selectedOptions.value = [];
-  currentCard.value--;
-  
-  // Resetear el flag después de un breve delay
   setTimeout(() => {
     isTransitioning.value = false;
   }, TRANSITION_DELAY);
 }
 
+// Agregar un watch para debuggear las selecciones
+watch(card1Selection, (newValue) => {
+  console.log('card1Selection cambió:', newValue);
+  console.log('Opciones disponibles para Card2:', dynamicOptionsCard2.value);
+});
+
+watch(card2Selection, (newValue) => {
+  console.log('card2Selection cambió:', newValue);
+});
+
+
 function isNextDisabled() {
-  const current = chunkedCards.value[currentCard.value];
-
+  // Card 1 - Sector
   if (currentCard.value === 0) {
-    return selectedOptions.value.length === 0;
+    return !card1Selection.value;
   }
 
+  // Card 2 - Tipo de empresa
   if (currentCard.value === 1) {
-    return selectedOptions.value.length === 0;
+    return card2Selection.value.length === 0;
   }
 
+  // Card 3 - Desafíos
   if (currentCard.value === 2) {
-    if (selectedOptions.value.length === 0) return true;
-    if (selectedOptions.value[0] === 'otros' && !otrosDesafiosTexto.value.trim()) return true;
+    if (card1Selection.value === 'otros') {
+      return !otrosDesafiosTexto.value.trim();
+    }
+    return card3Selection.value.length === 0;
   }
 
-  if (currentCard.value === 3 && !selectedOptions.value[0]) return true;
-
-  if (Array.isArray(current)) {
-    return selectedOptions.value.length === 0;
+  // Card 4 - Rol
+  if (currentCard.value === 3) {
+    if (card4Selection.value[0] === 'otros_rol') {
+      return !otrosRolTexto.value.trim();
+    }
+    return card4Selection.value.length === 0;
   }
 
-  return !contact.value.name || !contact.value.email || 
-         !contact.value.phone || !acceptedPrivacy.value;
+  // Card 5 - Momento de contacto
+  if (currentCard.value === 4) {
+    return card5Selection.value.length === 0;
+  }
+
+  // Formulario final
+  return !contact.value.name ||
+    !contact.value.email ||
+    !contact.value.phone ||
+    !acceptedPrivacy.value;
 }
 
-
 const submit = () => {
-
-    // Validar que los desafíos no estén vacíos
-  if ((currentCard.value === 2 && selectedOptions.value.length === 0) || 
-      (selectedOptions.value[0] === 'otros' && !otrosDesafiosTexto.value.trim())) {
-    showNotification('Por favor indica los desafíos de tu empresa', 'error');
-    return; // Detener el envío
-  }
-
-  // Validar el rol (Card 4)
-  if (currentCard.value === 3 && !selectedOptions.value[0]) {
-    showNotification('Por favor selecciona tu rol en la empresa', 'error');
-    return;
-  }
-
   const formData = {
     sector: card1Selection.value,
     sector_otro: otrosSectorTexto.value || null,
-    tipo_empresa: card2Selections.value[0] || null,
-    desafios: currentCard.value === 2 && selectedOptions.value[0] === 'otros' 
-      ? otrosDesafiosTexto.value 
-      : selectedOptions.value.join(', '),
-    rol: selectedOptions.value[0] || 'No especificado',  // Evita undefined
+    tipo_empresa: card2Selection.value[0] || null,
+    desafios: card3Selection.value.includes('otros')
+      ? otrosDesafiosTexto.value
+      : card3Selection.value.join(', '),
+    desafios_otros: card3Selection.value.includes('otros') ? otrosDesafiosTexto.value : null,
+    rol: card4Selection.value[0] === 'otros_rol'
+      ? otrosRolTexto.value
+      : (card4Selection.value[0] || 'No especificado'),
     rol_otro: otrosRolTexto.value || null,
-    momento_contacto: currentCard.value === 4 ? selectedOptions.value[0] : null,
+    momento_contacto: card5Selection.value[0] || null,
     nombre: contact.value.name,
     email: contact.value.email,
     telefono: contact.value.phone,
@@ -567,7 +597,13 @@ const submit = () => {
     fecha_envio: new Date().toISOString(),
   };
 
-  console.log('Enviando formulario:', formData); // Debugging
+  console.log('Enviando formulario:', formData);
+
+  if ((!card3Selection.value.length || (card3Selection.value.includes('otros') && !otrosDesafiosTexto.value.trim()))) {
+    showNotification('Por favor indica los desafíos de tu empresa', 'error');
+    currentCard.value = 2;
+    return;
+  }
 
   router.post('/api/contact-form', formData, {
     preserveScroll: true,
@@ -578,45 +614,17 @@ const submit = () => {
       currentCard.value = 0;
     },
     onError: (errors) => {
-      const errorMessages = {
-        nombre: 'El nombre es requerido',
-        email: 'Por favor ingresa un email válido',
-        telefono: 'El teléfono es requerido',
-        accepted_privacy: 'Debes aceptar la política de privacidad',
-      };
-      const firstError = Object.keys(errors).find(key => errors[key]);
-      showNotification(errorMessages[firstError] || errors[firstError], 'error');
+      console.error('Errores:', errors);
+      if (errors.desafios) {
+        currentCard.value = 2; // Volver a la card de desafíos si hay error
+      }
+      const firstError = Object.entries(errors)[0];
+      if (firstError) {
+        showNotification(firstError[1], 'error');
+      }
     },
     onFinish: () => isTransitioning.value = false,
   });
-};
-
-
-const resetForm = () => {
-  // Resetear selecciones
-  card1Selection.value = null;
-  card2Selections.value = [];
-  selectedOptions.value = [];
-  
-  // Resetear campos de texto especiales
-  otrosSectorTexto.value = '';
-  otrosDesafiosTexto.value = '';
-  otrosRolTexto.value = '';
-  
-  // Resetear formulario de contacto
-  contact.value = {
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-    priority: 'media'
-  };
-  
-  // Resetear checkbox de privacidad
-  acceptedPrivacy.value = false;
-  
-  // Resetear estado de transición
-  isTransitioning.value = false;
 };
 
 const showNotification = (message, type = 'success') => {
@@ -625,15 +633,6 @@ const showNotification = (message, type = 'success') => {
   // Ejemplo con alerta básica:
   alert(`${type === 'error' ? 'Error' : 'Éxito'}: ${message}`)
 }
-
-const dynamicOptionsCard2 = computed(() => {
-  if (card1Selection.value) {
-    const key = sectorKeyMap[card1Selection.value];
-    return optionsCard2BySelection[key] || [];
-  }
-  return [];
-});
-
 </script>
 
 <style scoped>
