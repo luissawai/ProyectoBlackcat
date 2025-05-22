@@ -16,7 +16,7 @@ class ContactController extends Controller
     public function index()
     {
         return Inertia::render('/', [
-            'recaptcha_key' => null, // Eliminado el uso de reCAPTCHA
+            'form' => $this->getEmptyFormData()
         ]);
     }
 
@@ -25,66 +25,102 @@ class ContactController extends Controller
         DB::beginTransaction();
 
         try {
-            Log::info('==== INICIO DEL PROCESO DE CONTACTO ====');
-            Log::info('Validando formulario', [
+            Log::info('==== INICIO DEL PROCESO DE CONTACTO ====', [
                 'ip' => $request->ip(),
-                'data' => $request->all() // Eliminado el `except('recaptcha_token')`
+                'timestamp' => now()
             ]);
 
-            // Validación realizada automáticamente por FormularioFormatRequest
+            // Validación realizada por FormularioFormatRequest
             $validated = $request->validated();
 
-            Log::info('Validación exitosa del formulario de contacto.');
+            // Preparar datos para guardar
+            $contactData = [
+                'sector' => $validated['sector'],
+                'sector_otro' => $validated['sector_otro'] ?? null,
+                'tipo_empresa' => $validated['tipo_empresa'],
+                'desafios' => is_array($validated['desafios']) 
+                    ? implode(', ', $validated['desafios']) 
+                    : $validated['desafios'],
+                'rol' => $validated['rol'],
+                'rol_otro' => $validated['rol_otro'] ?? null,
+                'momento_contacto' => $validated['momento_contacto'],
+                'nombre' => $validated['nombre'],
+                'email' => $validated['email'],
+                'telefono' => $validated['telefono'],
+                'mensaje' => $validated['mensaje'],
+                'accepted_privacy' => $validated['accepted_privacy'],
+                'fecha_envio' => now(),
+            ];
 
-            // Preparar datos para guardar en la base de datos
-            $contactData = collect($validated)->toArray(); // Eliminado el `except('recaptcha_token')`
+            Log::info('Datos preparados para guardar', ['data' => $contactData]);
 
             // Guardar en base de datos
-            Log::info('Intentando crear registro en BD', ['data' => $contactData]);
             $contact = Contact::create($contactData);
 
             if (!$contact->exists) {
-                throw new Exception('No se pudo guardar el formulario en la base de datos.');
+                throw new Exception('Error al guardar el formulario en la base de datos.');
             }
 
-            Log::info('Contacto guardado exitosamente', [
-                'id' => $contact->id,
-                'created_at' => $contact->created_at
-            ]);
-
-            // Enviar correo de confirmación
-            Mail::to($validated['correo'])->send(new ContactConfirmationMail($contact));
-
-            Log::info('Correo enviado correctamente.');
+            // Enviar correo
+            try {
+                Mail::to($validated['email'])->send(new ContactConfirmationMail($contact));
+                Log::info('Correo enviado correctamente.');
+            } catch (Exception $e) {
+                Log::error('Error al enviar correo', [
+                    'error' => $e->getMessage(),
+                    'email' => $validated['email']
+                ]);
+                // Continuar el proceso aunque falle el email
+            }
 
             DB::commit();
-
             Log::info('==== PROCESO COMPLETADO CON ÉXITO ====');
 
-            return Inertia::render('/', [
-                'success' => 'Mensaje enviado con éxito!',
-                'form' => array_fill_keys(['tipo_empresa', 'producto_interesado', 'empresa', 'nombre', 'correo', 'telefono', 'provincia', 'localidad', 'mensaje'], ''),
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Mensaje enviado con éxito'
             ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             Log::error('Error de validación', [
-                'errors' => $e->errors(),
-                'input' => $request->all() // Eliminado el `except('recaptcha_token')`
+                'errors' => $e->errors()
             ]);
-            throw $e;
+            
+            return response()->json([
+                'status' => 'error',
+                'errors' => $e->errors()
+            ], 422);
+
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error en el proceso de contacto', [
                 'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'input_data' => $request->all() // Eliminado el `except('recaptcha_token')`
+                'trace' => $e->getTraceAsString()
             ]);
 
-            return Inertia::render('/', [
-                'error' => 'Error al procesar el formulario: ' . $e->getMessage(),
-                'form' => $request->all(), // Eliminado el `except('recaptcha_token')`
-            ]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Ha ocurrido un error al procesar tu solicitud.'
+            ], 500);
         }
+    }
+
+    private function getEmptyFormData(): array
+    {
+        return [
+            'sector' => '',
+            'sector_otro' => '',
+            'tipo_empresa' => '',
+            'desafios' => [],
+            'rol' => '',
+            'rol_otro' => '',
+            'momento_contacto' => '',
+            'nombre' => '',
+            'email' => '',
+            'telefono' => '',
+            'mensaje' => '',
+            'accepted_privacy' => false
+        ];
     }
 }

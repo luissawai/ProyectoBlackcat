@@ -387,7 +387,14 @@ function toggleOption(value) {
     // Lógica para Card 2 (sin cambios)
     card2Selections.value = isSelected ? [] : [value];
     selectedOptions.value = isSelected ? [] : [value];
-  } else if (currentCard.value === 3) {
+  } else if (currentCard.value === 2) {
+    const maxDesafios = 2;
+    if (isSelected) {
+      selectedOptions.value = selectedOptions.value.filter(v => v !== value);
+    } else if (selectedOptions.value.length < maxDesafios) {
+      selectedOptions.value.push(value);
+    }
+  }else if (currentCard.value === 3) {
     // Lógica específica para Card 4
     if (value === 'otros_rol') { // Notar el nuevo value
       if (!isSelected) {
@@ -511,9 +518,12 @@ function isNextDisabled() {
     return selectedOptions.value.length === 0;
   }
 
-  if (currentCard.value === 2 && selectedOptions.value[0] === 'otros') {
-    return !otrosDesafiosTexto.value.trim();
+  if (currentCard.value === 2) {
+    if (selectedOptions.value.length === 0) return true;
+    if (selectedOptions.value[0] === 'otros' && !otrosDesafiosTexto.value.trim()) return true;
   }
+
+  if (currentCard.value === 3 && !selectedOptions.value[0]) return true;
 
   if (Array.isArray(current)) {
     return selectedOptions.value.length === 0;
@@ -525,71 +535,89 @@ function isNextDisabled() {
 
 
 const submit = () => {
-  // Preparar los datos según lo esperado por el backend
-  const formData = {
-    // Datos de selección (ajustados a snake_case)
-    tipo_empresa: card1Selection.value,
-    producto_interesado: card2Selections.value[0],
-    desafios: selectedOptions.value.join(', '), // Convertir array a string
-    rol: currentCard.value === 3 ? selectedOptions.value[0] : null,
-    momento_contacto: currentCard.value === 4 ? selectedOptions.value[0] : null,
 
-    // Datos de contacto (mapeados a los campos del backend)
-    empresa: contact.value.company || '',
-    nombre: contact.value.name || '',
-    correo: contact.value.email || '',
-    telefono: contact.value.phone || '',
-    provincia: contact.value.province || '',
-    localidad: contact.value.location || '',
-    mensaje: contact.value.message || '',
-    otros_sector: otrosSectorTexto.value || '',
-
-    // Política de privacidad
-    accepted_privacy: acceptedPrivacy.value,
+    // Validar que los desafíos no estén vacíos
+  if ((currentCard.value === 2 && selectedOptions.value.length === 0) || 
+      (selectedOptions.value[0] === 'otros' && !otrosDesafiosTexto.value.trim())) {
+    showNotification('Por favor indica los desafíos de tu empresa', 'error');
+    return; // Detener el envío
   }
 
-  // Usar Inertia.js para el envío del formulario
-  router.post('/formulario-contacto', formData, {
-    preserveScroll: true,
-    onSuccess: () => {
-      // Resetear el formulario después de un envío exitoso
-      resetForm()
+  // Validar el rol (Card 4)
+  if (currentCard.value === 3 && !selectedOptions.value[0]) {
+    showNotification('Por favor selecciona tu rol en la empresa', 'error');
+    return;
+  }
 
-      // Mostrar notificación de éxito (puedes usar tu sistema de notificaciones)
-      showNotification('¡Formulario enviado con éxito!', 'success')
+  const formData = {
+    sector: card1Selection.value,
+    sector_otro: otrosSectorTexto.value || null,
+    tipo_empresa: card2Selections.value[0] || null,
+    desafios: currentCard.value === 2 && selectedOptions.value[0] === 'otros' 
+      ? otrosDesafiosTexto.value 
+      : selectedOptions.value.join(', '),
+    rol: selectedOptions.value[0] || 'No especificado',  // Evita undefined
+    rol_otro: otrosRolTexto.value || null,
+    momento_contacto: currentCard.value === 4 ? selectedOptions.value[0] : null,
+    nombre: contact.value.name,
+    email: contact.value.email,
+    telefono: contact.value.phone,
+    mensaje: contact.value.message,
+    accepted_privacy: acceptedPrivacy.value,
+    fecha_envio: new Date().toISOString(),
+  };
+
+  console.log('Enviando formulario:', formData); // Debugging
+
+  router.post('/api/contact-form', formData, {
+    preserveScroll: true,
+    onBefore: () => isTransitioning.value = true,
+    onSuccess: () => {
+      showNotification('¡Gracias! Tu mensaje ha sido enviado correctamente.', 'success');
+      resetForm();
+      currentCard.value = 0;
     },
     onError: (errors) => {
-      // Mostrar errores de validación
-      if (Object.keys(errors).length > 0) {
-        showNotification('Por favor, corrige los errores en el formulario', 'error')
-      } else {
-        showNotification('Ocurrió un error al enviar el formulario', 'error')
-      }
+      const errorMessages = {
+        nombre: 'El nombre es requerido',
+        email: 'Por favor ingresa un email válido',
+        telefono: 'El teléfono es requerido',
+        accepted_privacy: 'Debes aceptar la política de privacidad',
+      };
+      const firstError = Object.keys(errors).find(key => errors[key]);
+      showNotification(errorMessages[firstError] || errors[firstError], 'error');
     },
-    onFinish: () => {
-      // Cualquier lógica que deba ejecutarse siempre al finalizar
-    }
-  })
-}
+    onFinish: () => isTransitioning.value = false,
+  });
+};
+
 
 const resetForm = () => {
-  card1Selection.value = ''
-  card2Selections.value = []
-  selectedOptions.value = []
-  currentCard.value = 1
+  // Resetear selecciones
+  card1Selection.value = null;
+  card2Selections.value = [];
+  selectedOptions.value = [];
+  
+  // Resetear campos de texto especiales
+  otrosSectorTexto.value = '';
+  otrosDesafiosTexto.value = '';
+  otrosRolTexto.value = '';
+  
+  // Resetear formulario de contacto
   contact.value = {
-    company: '',
     name: '',
     email: '',
     phone: '',
-    province: '',
-    location: '',
-    message: ''
-  }
-  otrosSectorTexto.value = ''
-  acceptedPrivacy.value = false
-  otrosDesafiosTexto.value = '';
-}
+    message: '',
+    priority: 'media'
+  };
+  
+  // Resetear checkbox de privacidad
+  acceptedPrivacy.value = false;
+  
+  // Resetear estado de transición
+  isTransitioning.value = false;
+};
 
 const showNotification = (message, type = 'success') => {
   // Aquí puedes integrar tu sistema de notificaciones (Toast, SweetAlert, etc.)

@@ -15,23 +15,76 @@ class Contact extends Model
      * Los campos que se pueden asignar masivamente.
      */
     protected $fillable = [
-        'sector_empresa',       // Sector seleccionado en el formulario
-        'tipo_empresa',         // Tipo de empresa
-        'desafios',             // Desafíos seleccionados (almacenados como JSON)
-        'rol_empresa',          // Rol dentro de la empresa
-        'momento_contacto',     // Momento preferido para el contacto
-        'nombre',               // Nombre del contacto
-        'correo',               // Correo electrónico
-        'telefono',             // Teléfono
-        'mensaje',              // Mensaje opcional
-        'politica_aceptada',    // Aceptación de la política de privacidad
+        'sector',              // Sector principal seleccionado
+        'sector_otro',         // Campo adicional para "otros" sectores
+        'tipo_empresa',        // Tipo de empresa seleccionado
+        'desafios',           // Desafíos seleccionados o texto personalizado
+        'rol',                // Rol seleccionado
+        'rol_otro',           // Campo adicional para "otros" roles
+        'momento_contacto',    // Cuándo prefiere ser contactado
+        'nombre',             // Nombre del contacto
+        'email',              // Email del contacto
+        'telefono',           // Teléfono del contacto
+        'mensaje',            // Mensaje adicional
+        'accepted_privacy',    // Aceptación de política de privacidad
+        'fecha_envio',        // Timestamp del envío
     ];
 
     /**
      * Los campos que deben ser convertidos a tipos nativos.
      */
     protected $casts = [
-        'desafios' => 'array',          // Convertir el campo JSON a un array automáticamente
-        'politica_aceptada' => 'boolean', // Convertir a booleano
+        'accepted_privacy' => 'boolean',
+        'fecha_envio' => 'datetime',
     ];
+
+    /**
+     * Los campos que deben ocultarse en las arrays.
+     */
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * Las reglas de validación para el modelo.
+     */
+    public static $rules = [
+        'sector' => 'required|string',
+        'sector_otro' => 'nullable|string|required_if:sector,otros',
+        'tipo_empresa' => 'required|string',
+        'desafios' => 'required|string',
+        'rol' => 'required|string',
+        'rol_otro' => 'nullable|string|required_if:rol,otros_rol',
+        'momento_contacto' => 'required|string',
+        'nombre' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'telefono' => 'required|string|max:20',
+        'mensaje' => 'nullable|string',
+        'accepted_privacy' => 'required|boolean|accepted',
+        'fecha_envio' => 'required|date',
+    ];
+
+    /**
+     * Accesor para obtener los desafíos como array si están en formato JSON
+     */
+    public function getDesafiosArrayAttribute()
+    {
+        if (is_string($this->desafios) && json_decode($this->desafios) !== null) {
+            return json_decode($this->desafios, true);
+        }
+        return $this->desafios;
+    }
+
+    /**
+     * Mutador para asegurar que los desafíos se guarden en formato string
+     */
+    public function setDesafiosAttribute($value)
+    {
+        if (is_array($value)) {
+            $this->attributes['desafios'] = implode(', ', $value);
+        } else {
+            $this->attributes['desafios'] = $value;
+        }
+    }
 }
