@@ -579,7 +579,8 @@ const submit = () => {
   const formData = {
     sector: card1Selection.value,
     sector_otro: otrosSectorTexto.value || null,
-    tipo_empresa: card2Selection.value[0] || null,
+    // Si el sector es 'otros', el tipo_empresa será null
+    tipo_empresa: card1Selection.value === 'otros' ? null : (card2Selection.value[0] || null),
     desafios: card3Selection.value.includes('otros')
       ? otrosDesafiosTexto.value
       : card3Selection.value.join(', '),
@@ -597,13 +598,22 @@ const submit = () => {
     fecha_envio: new Date().toISOString(),
   };
 
-  console.log('Enviando formulario:', formData);
-
-  if ((!card3Selection.value.length || (card3Selection.value.includes('otros') && !otrosDesafiosTexto.value.trim()))) {
-    showNotification('Por favor indica los desafíos de tu empresa', 'error');
-    currentCard.value = 2;
-    return;
+  // Validación especial para desafíos
+  if (card1Selection.value === 'otros') {
+    if (!otrosDesafiosTexto.value.trim()) {
+      showNotification('Por favor describe los desafíos de tu empresa', 'error');
+      currentCard.value = 2;
+      return;
+    }
+  } else {
+    if (!card3Selection.value.length) {
+      showNotification('Por favor indica los desafíos de tu empresa', 'error');
+      currentCard.value = 2;
+      return;
+    }
   }
+
+  console.log('Enviando formulario:', formData);
 
   router.post('/api/contact-form', formData, {
     preserveScroll: true,
@@ -615,8 +625,9 @@ const submit = () => {
     },
     onError: (errors) => {
       console.error('Errores:', errors);
-      if (errors.desafios) {
-        currentCard.value = 2; // Volver a la card de desafíos si hay error
+      // Si hay error de desafíos y no estamos en "otros", volver a la card de desafíos
+      if (errors.desafios && card1Selection.value !== 'otros') {
+        currentCard.value = 2;
       }
       const firstError = Object.entries(errors)[0];
       if (firstError) {

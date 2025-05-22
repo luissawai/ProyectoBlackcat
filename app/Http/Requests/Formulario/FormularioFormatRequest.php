@@ -10,16 +10,17 @@ class FormularioFormatRequest extends FormRequest
     {
         return [
             'sector' => 'required|string',
-            'sector_otro' => 'nullable|string|required_if:sector,otros',
-            'tipo_empresa' => 'required|string',
-            'desafios' => 'required_unless:sector,otros',  
+            'sector_otro' => 'required_if:sector,otros|nullable|string',
+            'tipo_empresa' => 'required_unless:sector,otros|nullable|string',
+            'desafios' => 'required|string',
+            'desafios_otros' => 'nullable|string',
             'rol' => 'required|string',
             'rol_otro' => 'nullable|string|required_if:rol,otros_rol',
             'momento_contacto' => 'required|string',
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'telefono' => 'required|string|max:20',
-            'mensaje' => 'nullable|string|max:1000',
+            'mensaje' => 'nullable|string',
             'accepted_privacy' => 'required|boolean|accepted',
         ];
     }
@@ -29,7 +30,7 @@ class FormularioFormatRequest extends FormRequest
         return [
             'accepted_privacy.accepted' => 'Debes aceptar la política de privacidad',
             'sector.required' => 'Por favor selecciona un sector',
-            'tipo_empresa.required' => 'Por favor selecciona un tipo de empresa',
+            'tipo_empresa.required_unless' => 'El tipo de empresa es requerido cuando no se selecciona "otros" como sector',
             'desafios.required_unless' => 'Por favor indica los desafíos de tu empresa',
             'rol.required' => 'Por favor selecciona tu rol',
             'momento_contacto.required' => 'Por favor selecciona cuándo prefieres que te contactemos',
