@@ -518,5 +518,321 @@
         "description": "Pierdo tiempo con tareas administrativas básicas",
         "recommendedSolution": "ERP"
       }
-    ]
+    ],
+
+    "restaurantes": [
+    {
+      "value": "gestion_inventario",
+      "title": "Control de inventario ineficiente",
+      "description": "Dificultad para controlar stock de alimentos y bebidas",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "reservas_manual",
+      "title": "Gestión manual de reservas",
+      "description": "Problemas con la organización de mesas y eventos",
+      "recommendedSolution": "CRM"
+    },
+    {
+      "value": "facturacion_lenta",
+      "title": "Facturación y cobros lentos",
+      "description": "Demoras en cierres de caja y control de ventas",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "fidelizacion_clientes",
+      "title": "Sin programa de fidelización",
+      "description": "No aprovecho datos de clientes frecuentes",
+      "recommendedSolution": "CRM"
+    }
+  ],
+  "hoteles": [
+    {
+      "value": "reservas_desorganizadas",
+      "title": "Reservas desorganizadas",
+      "description": "Conflictos en la asignación de habitaciones",
+      "recommendedSolution": "CRM"
+    },
+    {
+      "value": "check_in_manual",
+      "title": "Check-in/out manual",
+      "description": "Procesos lentos que generan colas y molestias",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "servicios_adicionales",
+      "title": "Control de servicios adicionales",
+      "description": "Dificultad para gestionar servicios extra y cobros",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "satisfaccion_cliente",
+      "title": "Sin seguimiento de satisfacción",
+      "description": "No hay sistema para gestionar feedback y mejoras",
+      "recommendedSolution": "CRM"
+    }
+  ],
+  "cafeterias": [
+    {
+      "value": "control_mermas",
+      "title": "Alto nivel de mermas",
+      "description": "Pérdidas por mal control de productos perecederos",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "pedidos_confusion",
+      "title": "Confusión en pedidos",
+      "description": "Errores en órdenes y preparación",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "falta_analisis",
+      "title": "Sin análisis de ventas",
+      "description": "No identifico productos más rentables",
+      "recommendedSolution": "Microsoft Power BI"
+    },
+    {
+      "value": "gestion_proveedores",
+      "title": "Gestión de proveedores caótica",
+      "description": "Descontrol en pedidos y entregas",
+      "recommendedSolution": "ERP"
+    }
+  ],
+  "agencias_viajes": [
+    {
+      "value": "seguimiento_reservas",
+      "title": "Seguimiento complejo de reservas",
+      "description": "Dificultad para gestionar múltiples proveedores",
+      "recommendedSolution": "CRM"
+    },
+    {
+      "value": "comunicacion_clientes",
+      "title": "Comunicación deficiente",
+      "description": "Falta de automatización en updates de viaje",
+      "recommendedSolution": "CRM"
+    },
+    {
+      "value": "gestion_comisiones",
+      "title": "Control de comisiones",
+      "description": "Problemas para calcular y facturar comisiones",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "oportunidades_perdidas",
+      "title": "Pérdida de oportunidades",
+      "description": "Sin seguimiento de leads y preferencias",
+      "recommendedSolution": "CRM"
+    }
+  ],
+  "fabricacion_alimentos": [
+    {
+      "value": "trazabilidad",
+      "title": "Falta de trazabilidad",
+      "description": "No hay control completo de lotes y productos",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "control_calidad",
+      "title": "Control de calidad manual",
+      "description": "Registros dispersos de controles y pruebas",
+      "recommendedSolution": "Microsoft Power Apps"
+    },
+    {
+      "value": "planificacion_produccion",
+      "title": "Planificación ineficiente",
+      "description": "Problemas con fechas de producción y caducidad",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "normativa_seguridad",
+      "title": "Gestión de normativas",
+      "description": "Dificultad para mantener registros HACCP",
+      "recommendedSolution": "Microsoft SharePoint"
+    }
+  ],
+  "textil": [
+    {
+      "value": "control_produccion",
+      "title": "Control de producción manual",
+      "description": "Sin seguimiento real de avance y costos",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "gestion_materiales",
+      "title": "Gestión de materiales",
+      "description": "Descontrol en inventario de telas e insumos",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "calidad_proceso",
+      "title": "Control de calidad",
+      "description": "Sin sistema para registrar defectos y mejoras",
+      "recommendedSolution": "Microsoft Power Apps"
+    },
+    {
+      "value": "costos_produccion",
+      "title": "Costos no controlados",
+      "description": "Dificultad para calcular márgenes reales",
+      "recommendedSolution": "ERP"
+    }
+  ],
+  "automotriz": [
+    {
+      "value": "control_componentes",
+      "title": "Control de componentes",
+      "description": "Problemas con inventario de partes y piezas",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "trazabilidad_produccion",
+      "title": "Trazabilidad limitada",
+      "description": "Sin registro detallado del proceso productivo",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "mantenimiento_equipos",
+      "title": "Mantenimiento de equipos",
+      "description": "Falta de control en mantenimientos preventivos",
+      "recommendedSolution": "Microsoft Power Apps"
+    },
+    {
+      "value": "calidad_procesos",
+      "title": "Gestión de calidad",
+      "description": "Sin sistema integrado de control de calidad",
+      "recommendedSolution": "ERP"
+    }
+  ],
+
+    "maquinaria": [
+    {
+      "value": "control_procesos",
+      "title": "Control de procesos complejo",
+      "description": "Dificultad para seguir múltiples etapas de fabricación",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "gestion_componentes",
+      "title": "Gestión de componentes y piezas",
+      "description": "Descontrol en inventario de partes y materiales",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "mantenimiento_preventivo",
+      "title": "Mantenimiento preventivo ineficiente",
+      "description": "No hay sistema para programar y controlar mantenimientos",
+      "recommendedSolution": "Microsoft Power Apps"
+    },
+    {
+      "value": "calidad_produccion",
+      "title": "Control de calidad manual",
+      "description": "Falta sistema integrado para aseguramiento de calidad",
+      "recommendedSolution": "Microsoft Power BI"
+    }
+  ],
+
+  "almacenaje": [
+    {
+      "value": "ubicacion_productos",
+      "title": "Ubicación de productos",
+      "description": "Dificultad para localizar items en almacén",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "control_entradas",
+      "title": "Control de entradas/salidas",
+      "description": "Sin registro eficiente de movimientos",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "optimizacion_espacio",
+      "title": "Espacio mal optimizado",
+      "description": "Distribución ineficiente del almacén",
+      "recommendedSolution": "Microsoft Power BI"
+    },
+    {
+      "value": "picking_lento",
+      "title": "Picking ineficiente",
+      "description": "Demoras en preparación de pedidos",
+      "recommendedSolution": "ERP"
+    }
+  ],
+  "transporte_carga": [
+    {
+      "value": "rutas_ineficientes",
+      "title": "Rutas no optimizadas",
+      "description": "Alto costo por mala planificación",
+      "recommendedSolution": "Microsoft Power BI"
+    },
+    {
+      "value": "seguimiento_envios",
+      "title": "Sin seguimiento en tiempo real",
+      "description": "No puedo informar ubicación a clientes",
+      "recommendedSolution": "Microsoft Power Apps"
+    },
+    {
+      "value": "documentacion_manual",
+      "title": "Documentación manual",
+      "description": "Pérdida de tiempo en papeleo",
+      "recommendedSolution": "Microsoft SharePoint"
+    },
+    {
+      "value": "control_costos",
+      "title": "Costos no controlados",
+      "description": "Sin análisis detallado de gastos",
+      "recommendedSolution": "ERP"
+    }
+  ],
+  
+  "mensajeria": [
+    {
+      "value": "tracking_envios",
+      "title": "Seguimiento de envíos manual",
+      "description": "No puedo dar información en tiempo real a clientes",
+      "recommendedSolution": "Microsoft Power Apps"
+    },
+    {
+      "value": "rutas_ineficientes",
+      "title": "Rutas de entrega ineficientes",
+      "description": "Pérdida de tiempo y recursos en desplazamientos",
+      "recommendedSolution": "Microsoft Power BI"
+    },
+    {
+      "value": "gestion_incidencias",
+      "title": "Gestión de incidencias manual",
+      "description": "No hay sistema para resolver problemas rápidamente",
+      "recommendedSolution": "CRM"
+    },
+    {
+      "value": "facturacion_compleja",
+      "title": "Facturación desorganizada",
+      "description": "Dificultad para gestionar múltiples servicios y tarifas",
+      "recommendedSolution": "ERP"
+    }
+  ],
+  "paqueteria": [
+    {
+      "value": "control_paquetes",
+      "title": "Control de paquetes ineficiente",
+      "description": "Dificultad para gestionar grandes volúmenes de envíos",
+      "recommendedSolution": "ERP"
+    },
+    {
+      "value": "coordinacion_repartidores",
+      "title": "Mala coordinación de repartidores",
+      "description": "Problemas para asignar y seguir entregas",
+      "recommendedSolution": "Microsoft Power Apps"
+    },
+    {
+      "value": "atencion_cliente",
+      "title": "Atención al cliente deficiente",
+      "description": "Sin sistema para gestionar consultas y reclamaciones",
+      "recommendedSolution": "CRM"
+    },
+    {
+      "value": "analisis_operaciones",
+      "title": "Falta de análisis operativo",
+      "description": "No puedo medir eficiencia ni optimizar recursos",
+      "recommendedSolution": "Microsoft Power BI"
+    }
+  ]
 }

@@ -140,7 +140,9 @@ const sectorKeyMap = {
   'Servicios Profesionales': 'servicios',
   'Salud y Bienestar': 'salud',
   'Educación y Formación': 'educacion',
-  'Comercio y Retail': 'comercio',
+  'Hostelería y Turismo': 'hosteleria',
+  'Industria y Manufactura': 'industria',
+  'Logística y Transporte': 'logistica',
   'otros': null,
 };
 
@@ -165,16 +167,32 @@ const optionsCard1 = [
     title: 'Educación y Formación',
     description: 'Academias, escuelas, formación online o especializada',
   },
+  // {
+  //   value: 'comercio',
+  //   title: 'Comercio y Retail',
+  //   description: 'Tiendas físicas, eCommerce, moda, belleza y más',
+  // },
   {
-    value: 'comercio',
-    title: 'Comercio y Retail',
-    description: 'Tiendas físicas, eCommerce, moda, belleza y más',
+    value: 'hosteleria',
+    title: 'Hostelería y Turismo',
+    description: 'Incluye restaurantes, bares, cafeterías, hoteles, agencias de viajes, empresas de transporte turístico, entre otros',
+  },
+  {
+    value: 'industria',
+    title: 'Industria y Manufactura',
+    description: 'Empresas dedicadas a la fabricación de productos, maquinaria, producción industrial, y actividades relacionadas',
+  },
+  {
+    value: 'logistica',
+    title: 'Logística y Transporte',
+    description: 'Empresas de transporte de mercancías, logística, almacenaje, mensajería y paquetería',
   },
   {
     value: 'otros',
     title: 'Otros Sectores',
     description: 'Selecciona si tu empresa no encaja en las categorías anteriores',
   },
+
 ];
 
 
@@ -209,14 +227,35 @@ const optionsCard2BySelection = {
     { value: 'formacion_profesional', title: 'Formación profesional y técnica', description: 'Cursos técnicos, formación laboral' },
     { value: 'centros_especializados', title: 'Centros especializados', description: 'Logopedia, TDAH, psicopedagogía y más' },
   ],
-  // Comercio y Retail
-  comercio: [
-    { value: 'ropa_complementos', title: 'Moda y complementos', description: 'Tiendas de ropa, calzado, accesorios' },
-    { value: 'deportes', title: 'Deportes y ocio', description: 'Artículos deportivos, hobbies, juegos y actividades recreativas' },
-    { value: 'belleza_cosmetica', title: 'Belleza y cosmética', description: 'Estéticas, perfumerías, productos de cuidado personal' },
-    { value: 'papeleria_regalos', title: 'Papelería y regalos', description: 'Librerías, papelerías, tiendas de regalo y material escolar' },
-  ],
-};
+  // // Comercio y Retail
+  // comercio: [
+  //   { value: 'ropa_complementos', title: 'Moda y complementos', description: 'Tiendas de ropa, calzado, accesorios' },
+  //   { value: 'deportes', title: 'Deportes y ocio', description: 'Artículos deportivos, hobbies, juegos y actividades recreativas' },
+  //   { value: 'belleza_cosmetica', title: 'Belleza y cosmética', description: 'Estéticas, perfumerías, productos de cuidado personal' },
+  //   { value: 'papeleria_regalos', title: 'Papelería y regalos', description: 'Librerías, papelerías, tiendas de regalo y material escolar' },
+  // ],
+  // Hostelería y Turismo
+  hosteleria: [
+    {value: "restaurantes", title: "Restaurantes", description: "Negocios dedicados a la preparación y venta de alimentos y bebidas"},
+    {value: "hoteles", title: "Hoteles", description: "Establecimientos que ofrecen alojamiento temporal"},
+    {value: "cafeterias", title: "Cafeterías", description: "Lugares donde se venden bebidas y productos ligeros"},
+    {value: "agencias_viajes", title: "Agencias de Viajes", description: "Empresas que organizan y comercializan productos turísticos"}
+],
+  // Industria y Manufactura
+  industria: [
+    {value: "fabricacion_alimentos", title: "Fabricación de alimentos", description: "Empresas que producen y procesan alimentos y bebidas"},
+    {value: "textil", title: "Industria textil", description: "Empresas que confeccionan ropa, telas y tejidos"},
+    {value: "automotriz", title: "Industria automotriz", description: "Empresas de fabricación de vehículos y partes"},
+    {value: "maquinaria", title: "Fabricación de maquinaria", description: "Producción de maquinaria y equipos industriales"}
+],
+  // Logística y Transporte
+  logistica: [
+    {value: "almacenaje", title: "Almacenaje", description: "Empresas de almacenamiento y gestión de stock"},
+    {value: "transporte_carga", title: "Transporte de carga", description: "Transporte terrestre, aéreo o marítimo de mercancías"},
+    {value: "mensajeria", title: "Mensajería", description: "Empresas de entrega rápida de documentos o paquetes"},
+    {value: "paqueteria", title: "Paquetería", description: "Distribución y entrega de paquetes a clientes"}
+    ]
+}
 
 const optionsCard4 = [
   { value: 'alta dirección', title: 'Alta Dirección', description: 'Soy responsable de elegir o aprobar soluciones' },
