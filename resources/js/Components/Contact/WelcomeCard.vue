@@ -74,7 +74,7 @@ const startProcess = () => {
 
 .tagline {
   font-size: 5rem;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 50px;
   max-width: 700px;
   margin-left: auto;

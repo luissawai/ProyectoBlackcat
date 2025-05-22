@@ -15,29 +15,53 @@
 
               <!-- Opciones dinámicas -->
               <div v-if="Array.isArray(card)" :class="['options-grid', currentCard === 4 ? 'one-column' : '']">
-                <div v-if="currentCard === 1 && dynamicOptionsCard2.length === 0" class="no-options-message">
-                  <p>Por favor, selecciona una opción en el paso anterior para continuar.</p>
-                  <button @click="prevCard" class="back-btn">Volver al paso anterior</button>
+                <!-- Caso especial para "otros" en la tarjeta 3 -->
+                <div v-if="currentCard === 2 && selectedOptions.includes('otros')" class="otros-desafios">
+                  <h3>Cuéntanos los desafíos de tu empresa</h3>
+                  <textarea 
+                    v-model="otrosDesafiosTexto" 
+                    rows="4"
+                    placeholder="Describe los principales desafíos que enfrenta tu empresa..."
+                    class="otros-textarea">
+                  </textarea>
                 </div>
+                <!-- Opciones normales para otros casos -->
                 <div v-else v-for="option in card" :key="option.value" class="option"
-                  :class="{ selected: selectedOptions.includes(option.value) }" @click="toggleOption(option.value)">
+                  :class="{ selected: selectedOptions.includes(option.value) }" 
+                  @click="toggleOption(option.value)">
                   <div class="checkbox-visual" :class="{ checked: selectedOptions.includes(option.value) }">
                     <span v-if="selectedOptions.includes(option.value)">✓</span>
                   </div>
                   <div class="text">
                     <strong>{{ option.title }}</strong>
                     <p>{{ option.description }}</p>
-                    <!-- Mostrar input si selecciona "otros" -->
-                    <div v-if="option.value === 'otros' && selectedOptions.includes('otros')" class="otros-input">
-                      <input type="text" v-model="otrosSectorTexto" placeholder="Especifica tu sector y tipo de empresa"
-                        @click.stop />
+                    <!-- Campo de texto para otros en Card 1 -->
+                    <div v-if="option.value === 'otros' && selectedOptions.includes('otros') && currentCard === 0" 
+                         class="otros-input">
+                      <input 
+                        type="text" 
+                        v-model="otrosSectorTexto" 
+                        placeholder="Especifica tu sector y tipo de empresa"
+                        @click.stop 
+                      />
+                    </div>
+                    <!-- Campo de texto para otros_rol en Card 4 -->
+                    <div v-if="option.value === 'otros_rol' && selectedOptions.includes('otros_rol') && currentCard === 3" 
+                         class="otros-input">
+                      <input 
+                        type="text" 
+                        v-model="otrosRolTexto" 
+                        placeholder="Especifica tu rol en la empresa"
+                        @click.stop 
+                      />
                     </div>
                   </div>
                 </div>
               </div>
 
               <!-- Formulario -->
-              <div v-else-if="currentCard === chunkedCards.length - 1" class="form-row" style="display: flex; gap: 24px;">
+              <div v-else-if="currentCard === chunkedCards.length - 1" class="form-row"
+                style="display: flex; gap: 24px;">
                 <div class="form col-left" style="flex: 1;">
                   <div class="form-group">
                     <label>Nombre</label>
@@ -55,7 +79,6 @@
                     <label>Mensaje</label>
                     <textarea v-model="contact.message" rows="3" placeholder="Escribe tú mensaje"></textarea>
                   </div>
-                  <!-- Checkbox horizontal -->
                   <div class="checkbox-row">
                     <input type="checkbox" id="privacy" v-model="acceptedPrivacy" />
                     <label for="privacy">
@@ -70,19 +93,34 @@
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2914.6903341962117!2d-3.8443329241328293!3d43.456199270991714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd494cce9e40d3fd%3A0xb4adf6d6c2f3ef8f!2sC.%20San%20Mart%C3%ADn%20del%20Pino%2C%2024%2C%2039011%20Santander%2C%20Cantabria!5e0!3m2!1ses!2ses!4v1715001442003!5m2!1ses!2ses"
                     width="100%" height="400" style="border:0; border-radius: 16px;" allowfullscreen="" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
                 </div>
               </div>
 
-              <!-- Botones -->
+              <!-- Botones de navegación -->
               <div class="buttons">
-                <button @click="prevCard" :disabled="false">← Atrás</button>
-                <button v-if="currentCard < chunkedCards.length - 1" @click="nextCard" class="next-btn"
-                  :disabled="isNextDisabled()">
+                <button 
+                  @click="prevCard" 
+                  :disabled="isTransitioning || currentCard === 0"
+                  :class="{ 'transitioning': isTransitioning }"
+                  class="nav-button prev-button">
+                  ← Atrás
+                </button>
+                <button 
+                  v-if="currentCard < chunkedCards.length - 1" 
+                  @click="nextCard" 
+                  :disabled="isTransitioning || isNextDisabled()"
+                  :class="{ 'transitioning': isTransitioning }"
+                  class="nav-button next-button">
                   Siguiente →
                 </button>
-                <button v-if="currentCard === chunkedCards.length - 1" @click="submit" class="submit-btn"
-                  :disabled="isNextDisabled()">
+                <button 
+                  v-if="currentCard === chunkedCards.length - 1" 
+                  @click="submit" 
+                  :disabled="isTransitioning || isNextDisabled()"
+                  :class="{ 'transitioning': isTransitioning }"
+                  class="nav-button submit-button">
                   Enviar
                 </button>
               </div>
@@ -112,10 +150,13 @@ const currentCard = ref(0);
 const card1Selection = ref(null);
 const selectedOptions = ref([]);
 const card2Selections = ref([]);
-const otrosTexto = ref('');
+const isTransitioning = ref(false);
 const acceptedPrivacy = ref(false);
 const savedScrollPosition = ref(null);
 const otrosSectorTexto = ref('');
+const otrosDesafiosTexto = ref('');
+const otrosRolTexto = ref(''); // Agregar este ref junto a los demás refs al inicio
+const TRANSITION_DELAY = 100;
 
 const titles = [
   '¿Cuál es el sector de tu empresa?',
@@ -236,32 +277,32 @@ const optionsCard2BySelection = {
   // ],
   // Hostelería y Turismo
   hosteleria: [
-    {value: "restaurantes", title: "Restaurantes", description: "Negocios dedicados a la preparación y venta de alimentos y bebidas"},
-    {value: "hoteles", title: "Hoteles", description: "Establecimientos que ofrecen alojamiento temporal"},
-    {value: "cafeterias", title: "Cafeterías", description: "Lugares donde se venden bebidas y productos ligeros"},
-    {value: "agencias_viajes", title: "Agencias de Viajes", description: "Empresas que organizan y comercializan productos turísticos"}
-],
+    { value: "restaurantes", title: "Restaurantes", description: "Negocios dedicados a la preparación y venta de alimentos y bebidas" },
+    { value: "hoteles", title: "Hoteles", description: "Establecimientos que ofrecen alojamiento temporal" },
+    { value: "cafeterias", title: "Cafeterías", description: "Lugares donde se venden bebidas y productos ligeros" },
+    { value: "agencias_viajes", title: "Agencias de Viajes", description: "Empresas que organizan y comercializan productos turísticos" }
+  ],
   // Industria y Manufactura
   industria: [
-    {value: "fabricacion_alimentos", title: "Fabricación de alimentos", description: "Empresas que producen y procesan alimentos y bebidas"},
-    {value: "textil", title: "Industria textil", description: "Empresas que confeccionan ropa, telas y tejidos"},
-    {value: "automotriz", title: "Industria automotriz", description: "Empresas de fabricación de vehículos y partes"},
-    {value: "maquinaria", title: "Fabricación de maquinaria", description: "Producción de maquinaria y equipos industriales"}
-],
+    { value: "fabricacion_alimentos", title: "Fabricación de alimentos", description: "Empresas que producen y procesan alimentos y bebidas" },
+    { value: "textil", title: "Industria textil", description: "Empresas que confeccionan ropa, telas y tejidos" },
+    { value: "automotriz", title: "Industria automotriz", description: "Empresas de fabricación de vehículos y partes" },
+    { value: "maquinaria", title: "Fabricación de maquinaria", description: "Producción de maquinaria y equipos industriales" }
+  ],
   // Logística y Transporte
   logistica: [
-    {value: "almacenaje", title: "Almacenaje", description: "Empresas de almacenamiento y gestión de stock"},
-    {value: "transporte_carga", title: "Transporte de carga", description: "Transporte terrestre, aéreo o marítimo de mercancías"},
-    {value: "mensajeria", title: "Mensajería", description: "Empresas de entrega rápida de documentos o paquetes"},
-    {value: "paqueteria", title: "Paquetería", description: "Distribución y entrega de paquetes a clientes"}
-    ]
+    { value: "almacenaje", title: "Almacenaje", description: "Empresas de almacenamiento y gestión de stock" },
+    { value: "transporte_carga", title: "Transporte de carga", description: "Transporte terrestre, aéreo o marítimo de mercancías" },
+    { value: "mensajeria", title: "Mensajería", description: "Empresas de entrega rápida de documentos o paquetes" },
+    { value: "paqueteria", title: "Paquetería", description: "Distribución y entrega de paquetes a clientes" }
+  ]
 }
 
 const optionsCard4 = [
   { value: 'alta dirección', title: 'Alta Dirección', description: 'Soy responsable de elegir o aprobar soluciones' },
   { value: 'área operativa o administrativa', title: 'Área operativa o administrativa', description: 'Uso de herramientas en el día a día para gestionar tareas' },
   { value: 'área técnica o TI', title: 'Área técnica o TI', description: 'Me encargo de implementar o mantener los sistemas' },
-  { value: 'otros', title: 'Otros (especificar):', description: 'Cuéntanos cual es tu rol' },
+  { value: 'otros_rol', title: 'Otros (especificar):', description: 'Cuéntanos cual es tu rol' },
 ]
 
 const optionsCard5 = [
@@ -279,12 +320,19 @@ const contact = ref({
 })
 
 const dynamicOptionsCard3 = computed(() => {
-  if (selectedOptions.value.length > 0) {
-    const selectedCard2Value = selectedOptions.value[0]; // Solo se permite una selección en Card2
-    return challengesData[selectedCard2Value] || [];
+  console.log('Card2Selections:', card2Selections.value);
+  
+  // Si estamos en Card3 y tenemos una selección de Card2
+  if (currentCard.value === 2 && card2Selections.value.length > 0) {
+    const selectedType = card2Selections.value[0];
+    console.log('Tipo seleccionado:', selectedType);
+    console.log('Desafíos disponibles:', challengesData[selectedType]);
+    return challengesData[selectedType] || [];
   }
+  
   return [];
 });
+
 
 const chunkedCards = computed(() => {
   const cards = [optionsCard1];
@@ -322,29 +370,38 @@ function getStackStyle(offset) {
 }
 
 function toggleOption(value) {
-  console.log('🖱 toggleOption:', value);
-
   const isSelected = selectedOptions.value.includes(value);
 
   if (currentCard.value === 0) {
+    // Lógica para Card 1
     const selectedOption = optionsCard1.find(opt => opt.value === value);
     card1Selection.value = isSelected ? null : selectedOption.title;
     selectedOptions.value = isSelected ? [] : [value];
     card2Selections.value = [];
 
-    // Si selecciona "otros", limpiar el texto anterior
+    // Solo limpiar otrosSectorTexto cuando corresponda
     if (value === 'otros' && !isSelected) {
       otrosSectorTexto.value = '';
     }
   } else if (currentCard.value === 1) {
-    // Actualiza card2Selections en la tarjeta 2
-    card2Selections.value = isSelected
-      ? []
-      : [value];
-    selectedOptions.value = isSelected
-      ? []
-      : [value];
+    // Lógica para Card 2 (sin cambios)
+    card2Selections.value = isSelected ? [] : [value];
+    selectedOptions.value = isSelected ? [] : [value];
+  } else if (currentCard.value === 3) {
+    // Lógica específica para Card 4
+    if (value === 'otros_rol') { // Notar el nuevo value
+      if (!isSelected) {
+        selectedOptions.value = [value];
+        otrosRolTexto.value = ''; // Limpiar el texto del rol
+      } else {
+        selectedOptions.value = [];
+      }
+    } else {
+      selectedOptions.value = [value];
+      otrosRolTexto.value = ''; // Limpiar el texto del rol al seleccionar otra opción
+    }
   } else {
+    // Lógica para otras cards
     const cardLimit = currentCard.value === 2 ? 3 : 1;
     if (isSelected) {
       selectedOptions.value = selectedOptions.value.filter(v => v !== value);
@@ -354,9 +411,6 @@ function toggleOption(value) {
       selectedOptions.value.push(value);
     }
   }
-
-  console.log('🎯 selectedOptions después del toggle:', selectedOptions.value);
-  console.log('🎯 card2Selections después del toggle:', card2Selections.value);
 }
 
 watch(card2Selections, (val) => {
@@ -365,26 +419,48 @@ watch(card2Selections, (val) => {
 });
 
 function nextCard() {
-  // Si estamos en la Card1 y seleccionó "otros", saltar Card2
+  if (isTransitioning.value) return;
+  isTransitioning.value = true;
+
+  // Si estamos en la Card1 y seleccionó "otros", saltar a Card4
   if (currentCard.value === 0 && selectedOptions.value[0] === 'otros') {
-    currentCard.value = 2;
+    currentCard.value = 3; // Ir a Card4
+    selectedOptions.value = []; // Limpiar selecciones
+    isTransitioning.value = false;
     return;
   }
 
   if (currentCard.value < chunkedCards.value.length - 1) {
-    // Si vamos a avanzar de la tarjeta 1 a la 2, mantener la selección
+    // Guardar selección de Card2 antes de avanzar
     if (currentCard.value === 1) {
       card2Selections.value = [...selectedOptions.value];
     }
+
+    // Limpiar selecciones al avanzar
+    selectedOptions.value = [];
+    
+    // Avanzar a la siguiente tarjeta
     currentCard.value++;
+
+    // Si estamos en Card2 y vamos a Card3, cargar los desafíos
+    if (currentCard.value === 2 && card2Selections.value.length > 0) {
+      // Los desafíos se cargarán automáticamente por el computed dynamicOptionsCard3
+      console.log('Cargando desafíos para:', card2Selections.value[0]);
+    }
   }
+
+  setTimeout(() => {
+    isTransitioning.value = false;
+  }, TRANSITION_DELAY);
 }
 
 function prevCard() {
-  if (currentCard.value === 0) {
-    // Guardar posición actual antes de navegar
-    savedScrollPosition.value = window.pageYOffset || document.documentElement.scrollTop;
+  // Prevenir múltiples clicks
+  if (isTransitioning.value) return;
+  isTransitioning.value = true;
 
+  if (currentCard.value === 0) {
+    savedScrollPosition.value = window.pageYOffset || document.documentElement.scrollTop;
     router.visit('/#formulario', {
       preserveScroll: true,
       onSuccess: () => {
@@ -393,52 +469,60 @@ function prevCard() {
             top: savedScrollPosition.value,
             behavior: 'auto',
           });
-        }, 50);
+          isTransitioning.value = false;
+        }, TRANSITION_DELAY);
       },
     });
-  } else {
-    // Si estamos en Card3 y venimos de "otros", volver a Card1
-    if (
-      currentCard.value === 2 &&
-      selectedOptions.value.length === 1 &&
-      selectedOptions.value[0] === 'otros'
-    ) {
-      currentCard.value = 0;
-      // Mantener la selección de "otros" y el texto escrito
-      // No limpiar selectedOptions ni otrosSectorTexto aquí
-      return;
-    }
-
-    if (currentCard.value === 3) {
-      // Si volvemos de la tarjeta 4 a la tarjeta 3, restaurar las selecciones originales de la tarjeta 3
-      selectedOptions.value = [...card2Selections.value];
-      console.log('🔄 Restaurando selecciones de la tarjeta 3:', selectedOptions.value);
-    } else if (currentCard.value === 2) {
-      // Si volvemos de la tarjeta 3 a la tarjeta 2, restauramos las selecciones de la tarjeta 2
-      selectedOptions.value = [...card2Selections.value];
-    } else {
-      // Para otros casos, limpiamos las selecciones
-      selectedOptions.value = [];
-    }
-
-    currentCard.value--;
+    return;
   }
+
+  // Si estamos en Card4 y venimos de "otros"
+  if (currentCard.value === 3 && card1Selection.value === 'Otros Sectores') {
+    currentCard.value = 0; // Volver a Card1
+    selectedOptions.value = ['otros']; // Mantener selección de "otros" en Card1
+    isTransitioning.value = false;
+    return;
+  }
+
+  // Para otros casos
+  if (currentCard.value === 2) {
+    selectedOptions.value = [...card2Selections.value];
+  } else {
+    selectedOptions.value = [];
+  }
+
+  selectedOptions.value = [];
+  currentCard.value--;
+  
+  // Resetear el flag después de un breve delay
+  setTimeout(() => {
+    isTransitioning.value = false;
+  }, TRANSITION_DELAY);
 }
 
 function isNextDisabled() {
   const current = chunkedCards.value[currentCard.value];
 
-  // Si está en Card2, requiere al menos una opción seleccionada
+  if (currentCard.value === 0) {
+    return selectedOptions.value.length === 0;
+  }
+
   if (currentCard.value === 1) {
-    return selectedOptions.value.length === 0 || dynamicOptionsCard2.value.length === 0;
+    return selectedOptions.value.length === 0;
+  }
+
+  if (currentCard.value === 2 && selectedOptions.value[0] === 'otros') {
+    return !otrosDesafiosTexto.value.trim();
   }
 
   if (Array.isArray(current)) {
     return selectedOptions.value.length === 0;
-  } else {
-    return !contact.value.name || !contact.value.email || !contact.value.phone || !acceptedPrivacy.value;
   }
+
+  return !contact.value.name || !contact.value.email || 
+         !contact.value.phone || !acceptedPrivacy.value;
 }
+
 
 const submit = () => {
   // Preparar los datos según lo esperado por el backend
@@ -470,7 +554,7 @@ const submit = () => {
     onSuccess: () => {
       // Resetear el formulario después de un envío exitoso
       resetForm()
-      
+
       // Mostrar notificación de éxito (puedes usar tu sistema de notificaciones)
       showNotification('¡Formulario enviado con éxito!', 'success')
     },
@@ -504,6 +588,7 @@ const resetForm = () => {
   }
   otrosSectorTexto.value = ''
   acceptedPrivacy.value = false
+  otrosDesafiosTexto.value = '';
 }
 
 const showNotification = (message, type = 'success') => {
@@ -867,6 +952,37 @@ button:hover:not(:disabled) {
 
 .back-btn {
   margin-top: 15px;
+}
+
+.otros-desafios {
+  width: 100%;
+  padding: 20px;
+  background-color: #161716;
+  border-radius: 16px;
+}
+
+.otros-desafios h3 {
+  color: #ffffff;
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+}
+
+.otros-textarea {
+  width: 100%;
+  background-color: #232324;
+  border: 1px solid #727270;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1.2rem;
+  padding: 14px;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.otros-textarea:focus {
+  border-color: #4e4d4d;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(78, 77, 77, 0.1);
 }
 
 @media (max-width: 1024px) {
