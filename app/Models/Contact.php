@@ -15,19 +15,20 @@ class Contact extends Model
      * Los campos que se pueden asignar masivamente.
      */
     protected $fillable = [
-        'sector',              // Sector principal seleccionado
-        'sector_otro',         // Campo adicional para "otros" sectores
-        'tipo_empresa',        // Tipo de empresa seleccionado
-        'desafios',           // Desafíos seleccionados o texto personalizado
-        'rol',                // Rol seleccionado
-        'rol_otro',           // Campo adicional para "otros" roles
-        'momento_contacto',    // Cuándo prefiere ser contactado
-        'nombre',             // Nombre del contacto
-        'email',              // Email del contacto
-        'telefono',           // Teléfono del contacto
-        'mensaje',            // Mensaje adicional
-        'accepted_privacy',    // Aceptación de política de privacidad
-        'fecha_envio',        // Timestamp del envío
+        'sector',
+        'sector_otro',
+        'tipo_empresa',
+        'desafios',
+        'desafios_otros',
+        'rol',
+        'rol_otro',
+        'momento_contacto',
+        'nombre',
+        'email',
+        'telefono',
+        'mensaje',
+        'accepted_privacy',
+        'fecha_envio'
     ];
 
     /**

@@ -137,6 +137,8 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import challengesData from './Challenges.json';
 import image from '@images/about/principal.png';
 
@@ -575,67 +577,144 @@ function isNextDisabled() {
     !acceptedPrivacy.value;
 }
 
-const submit = () => {
-  const formData = {
-    sector: card1Selection.value,
-    sector_otro: otrosSectorTexto.value || null,
-    // Si el sector es 'otros', el tipo_empresa será null
-    tipo_empresa: card1Selection.value === 'otros' ? null : (card2Selection.value[0] || null),
-    desafios: card3Selection.value.includes('otros')
-      ? otrosDesafiosTexto.value
-      : card3Selection.value.join(', '),
-    desafios_otros: card3Selection.value.includes('otros') ? otrosDesafiosTexto.value : null,
-    rol: card4Selection.value[0] === 'otros_rol'
-      ? otrosRolTexto.value
-      : (card4Selection.value[0] || 'No especificado'),
-    rol_otro: otrosRolTexto.value || null,
-    momento_contacto: card5Selection.value[0] || null,
-    nombre: contact.value.name,
-    email: contact.value.email,
-    telefono: contact.value.phone,
-    mensaje: contact.value.message,
-    accepted_privacy: acceptedPrivacy.value,
-    fecha_envio: new Date().toISOString(),
-  };
-
-  // Validación especial para desafíos
-  if (card1Selection.value === 'otros') {
-    if (!otrosDesafiosTexto.value.trim()) {
-      showNotification('Por favor describe los desafíos de tu empresa', 'error');
-      currentCard.value = 2;
-      return;
-    }
-  } else {
-    if (!card3Selection.value.length) {
-      showNotification('Por favor indica los desafíos de tu empresa', 'error');
-      currentCard.value = 2;
-      return;
-    }
+const submit = async () => {
+  if (!acceptedPrivacy.value) {
+    await Swal.fire({
+      title: "Política de privacidad",
+      text: "Debes aceptar la política de privacidad para continuar.",
+      icon: "warning",
+      confirmButtonText: "Aceptar"
+    });
+    return;
   }
 
-  console.log('Enviando formulario:', formData);
+  isTransitioning.value = true;
+  let loadingSwal;
 
-  router.post('/api/contact-form', formData, {
-    preserveScroll: true,
-    onBefore: () => isTransitioning.value = true,
-    onSuccess: () => {
-      showNotification('¡Gracias! Tu mensaje ha sido enviado correctamente.', 'success');
-      resetForm();
-      currentCard.value = 0;
-    },
-    onError: (errors) => {
-      console.error('Errores:', errors);
-      // Si hay error de desafíos y no estamos en "otros", volver a la card de desafíos
-      if (errors.desafios && card1Selection.value !== 'otros') {
+  try {
+    const formData = {
+      sector: card1Selection.value,
+      sector_otro: otrosSectorTexto.value || null,
+      tipo_empresa: card1Selection.value === 'otros' ? null : (card2Selection.value[0] || null),
+      desafios: card3Selection.value.includes('otros')
+        ? otrosDesafiosTexto.value
+        : card3Selection.value.join(', '),
+      desafios_otros: card3Selection.value.includes('otros') ? otrosDesafiosTexto.value : null,
+      rol: card4Selection.value[0] === 'otros_rol'
+        ? otrosRolTexto.value
+        : (card4Selection.value[0] || 'No especificado'),
+      rol_otro: otrosRolTexto.value || null,
+      momento_contacto: card5Selection.value[0] || null,
+      nombre: contact.value.name,
+      email: contact.value.email,
+      telefono: contact.value.phone,
+      mensaje: contact.value.message,
+      accepted_privacy: acceptedPrivacy.value,
+      fecha_envio: new Date().toISOString()
+    };
+
+    // Validación especial para desafíos
+    if (card1Selection.value === 'otros') {
+      if (!otrosDesafiosTexto.value.trim()) {
+        showNotification('Por favor describe los desafíos de tu empresa', 'error');
+        currentCard.value = 2;
+        return;
+      }
+    } else {
+      if (!card3Selection.value.length) {
+        showNotification('Por favor indica los desafíos de tu empresa', 'error');
+        currentCard.value = 2;
+        return;
+      }
+    }
+
+    // Mostrar loading
+    loadingSwal = Swal.fire({
+      title: "Enviando...",
+      html: "Por favor espera mientras procesamos tu mensaje.",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    console.log('Sending form data:', formData);
+    const response = await axios.post('/api/contact-form', formData);
+    console.log('Response:', response.data);
+    
+
+    if (loadingSwal) {
+      loadingSwal.close();
+    }
+
+    await Swal.fire({
+      title: "¡Gracias!",
+      text: "Tu mensaje ha sido enviado correctamente.",
+      icon: "success",
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "#4e4d4d"
+    });
+
+    // Resetear formulario
+    resetForm();
+    currentCard.value = 0;
+
+  } catch (error) {
+    
+        console.error('Error details:', {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status
+        });
+
+    if (loadingSwal) {
+      loadingSwal.close();
+    }
+
+    let errorMessage = 'Hubo un error al enviar el formulario.';
+
+    if (error.response?.data?.errors) {
+      const firstError = Object.values(error.response.data.errors)[0];
+      errorMessage = firstError;
+
+      // Manejar navegación a tarjeta con error
+      if (error.response.data.errors.desafios && card1Selection.value !== 'otros') {
         currentCard.value = 2;
       }
-      const firstError = Object.entries(errors)[0];
-      if (firstError) {
-        showNotification(firstError[1], 'error');
-      }
-    },
-    onFinish: () => isTransitioning.value = false,
-  });
+    }
+
+    await Swal.fire({
+      title: "Error",
+      text: errorMessage,
+      icon: "error",
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "#4e4d4d"
+    });
+  } finally {
+    isTransitioning.value = false;
+  }
+};
+
+// Agregar función para resetear el formulario
+const resetForm = () => {
+  card1Selection.value = null;
+  card2Selection.value = [];
+  card3Selection.value = [];
+  card4Selection.value = [];
+  card5Selection.value = [];
+  selectedOptions.value = [];
+  card2Selections.value = [];
+  otrosSectorTexto.value = '';
+  otrosDesafiosTexto.value = '';
+  otrosRolTexto.value = '';
+  acceptedPrivacy.value = false;
+  contact.value = {
+    name: '',
+    phone: '',
+    email: '',
+    message: '',
+    priority: 'media'
+  };
 };
 
 const showNotification = (message, type = 'success') => {

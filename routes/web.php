@@ -16,9 +16,7 @@ Route::get('/', [HomeController::class, 'index'])->name('public.home.index');
 Route::get('/politica-privacidad', [PoliticasController::class, 'privacidad'])->name('privacidad');
 Route::get('/politica-cookies', [PoliticasController::class, 'cookies'])->name('cookies');
 Route::get('/aviso-legal', [PoliticasController::class, 'aviso_legal'])->name('aviso-legal');
-Route::post('/api/contact-form', [ContactController::class, 'store'])
-    ->name('contact.store')
-    ->middleware('web');
+Route::post('/api/contact-form', [ContactController::class, 'store']);
 
 
 Route::middleware('auth')->group(function () {

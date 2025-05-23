@@ -12,16 +12,16 @@ class FormularioFormatRequest extends FormRequest
             'sector' => 'required|string',
             'sector_otro' => 'required_if:sector,otros|nullable|string',
             'tipo_empresa' => 'required_unless:sector,otros|nullable|string',
-            'desafios' => 'required|string',
-            'desafios_otros' => 'nullable|string',
+            'desafios' => 'required_unless:sector,otros',
+            'desafios_otros' => 'required_if:sector,otros|nullable|string',
             'rol' => 'required|string',
-            'rol_otro' => 'nullable|string|required_if:rol,otros_rol',
+            'rol_otro' => 'required_if:rol,otros_rol|nullable|string',
             'momento_contacto' => 'required|string',
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'telefono' => 'required|string|max:20',
             'mensaje' => 'nullable|string',
-            'accepted_privacy' => 'required|boolean|accepted',
+            'accepted_privacy' => 'required|boolean',
         ];
     }
 

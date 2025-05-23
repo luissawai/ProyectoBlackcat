@@ -12,8 +12,9 @@ return new class extends Migration
             $table->id();
             $table->string('sector');
             $table->string('sector_otro')->nullable();
-            $table->string('tipo_empresa');
+            $table->string('tipo_empresa')->nullable();
             $table->text('desafios');
+            $table->text('desafios_otros')->nullable();
             $table->string('rol');
             $table->string('rol_otro')->nullable();
             $table->string('momento_contacto');
