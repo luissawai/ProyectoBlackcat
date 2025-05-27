@@ -3,128 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevo contacto recibido</title>
+    <title>Nuevo mensaje de contacto</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f7fc;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
             margin: 0;
-            padding: 0;
-            color: #333;
+            padding: 20px;
         }
         .container {
-            width: 100%;
             max-width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-            background-color: #ffffff;
+            margin: auto;
+            background: #ffffff;
+            padding: 0;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .info-box {
-            background-color: #f8f9fa;
-            border-left: 4px solid #3498db;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        th {
-            background-color: #f1f5f9;
-            font-weight: 600;
-            color: #2c3e50;
-            width: 30%;
-        }
-        .action-button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            background-color: #3498db;
+        .header {
+            background-color: #1a1a1a;
             color: white;
-            text-decoration: none;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+        .content {
+            padding: 30px;
+        }
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .info-section {
+            margin-bottom: 30px;
+        }
+        .info-section h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        .info-grid {
+            display: table;
+            width: 100%;
+        }
+        .info-row {
+            display: table-row;
+        }
+        .info-label {
+            display: table-cell;
+            color: #1a1a1a;
+            font-weight: bold;
+            padding: 10px 0;
+            width: 140px;
+            vertical-align: top;
+        }
+        .info-value {
+            display: table-cell;
+            color: #333;
+            padding: 10px 0;
+        }
+        .desafios-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .desafio-item {
+            background-color: #f8f9fa;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-left: 4px solid #1a1a1a;
             border-radius: 4px;
-            font-size: 16px;
-            text-align: center;
         }
-        .action-button:hover {
-            background-color: #2980b9;
+        .desafio-title {
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 4px;
         }
-        footer {
-            margin-top: 30px;
-            text-align: center;
+        .desafio-description {
+            color: #666;
             font-size: 14px;
-            color: #7f8c8d;
+            margin-bottom: 4px;
+        }
+        .desafio-solution {
+            color: #28a745;
+            font-size: 12px;
+            font-style: italic;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
             border-top: 1px solid #eee;
-            padding-top: 15px;
+        }
+        .copyright {
+            color: #999;
+            font-size: 11px;
+        }
+
+        @media (max-width: 768px) {
+
+            title{
+                font-size: 20px;
+            }
+            .info-grid {
+                display: block;
+            }
+            .info-row {
+                display: block;
+                margin-bottom: 15px;
+            }
+            .info-label {
+                display: block;
+                width: auto;
+                margin-bottom: 5px;
+                font-size: 18px;
+            }
+            .info-value {
+                display: block;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>Nuevo mensaje de contacto</h1>
+        </div>
+        
+        <div class="content">
+            <p class="subtitle">Nuevo Mensaje. Un cliente se puso en contacto</p>
 
-<div class="container">
-    <h1>Nuevo mensaje recibido</h1>
-    
+            <div class="info-section">
+                <h2>Información del Contacto</h2>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">Nombre:</div>
+                        <div class="info-value">{{ $contact->nombre }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Email:</div>
+                        <div class="info-value">{{ $contact->email }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Teléfono:</div>
+                        <div class="info-value">{{ $contact->telefono }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Sector:</div>
+                        <div class="info-value">
+                            @if($contact->sector === 'otros')
+                                {{ $contact->sector_otro }}
+                            @else
+                                {{ ucfirst($contact->sector) }}
+                            @endif
+                        </div>
+                    </div>
+                    @if($contact->sector !== 'otros')
+                    <div class="info-row">
+                        <div class="info-label">Tipo de Empresa:</div>
+                        <div class="info-value">{{ ucfirst($contact->tipo_empresa) }}</div>
+                    </div>
+                    @endif
+                    <div class="info-row">
+                        <div class="info-label">Desafíos:</div>
+                        <div class="info-value">
+                            @if($contact->sector === 'otros')
+                                <div class="desafio-item">
+                                    <div class="desafio-title">Desafíos personalizados</div>
+                                    <div class="desafio-description">{{ $contact->desafios_otros }}</div>
+                                </div>
+                            @else
+                                @php
+                                    // Intentar obtener como array (con cast automático)
+                                    $desafios = $contact->desafios;
+                                    
+                                    // Si no es array, intentar decodificar manualmente
+                                    if (!is_array($desafios)) {
+                                        $desafios = json_decode($contact->desafios, true);
+                                    }
+                                    
+                                    // Si aún no es array, dividir por comas como fallback
+                                    if (!is_array($desafios)) {
+                                        $desafios = explode(', ', $contact->desafios);
+                                    }
+                                @endphp
+                                
+                                @if(is_array($desafios) && count($desafios) > 0)
+                                    <ul class="desafios-list">
+                                        @foreach($desafios as $desafio)
+                                            <li class="desafio-item">
+                                                @if(is_array($desafio) && isset($desafio['title']))
+                                                    <div class="desafio-title">{{ $desafio['title'] }}</div>
+                                                    @if(isset($desafio['description']))
+                                                        <div class="desafio-description">{{ $desafio['description'] }}</div>
+                                                    @endif
+                                                    @if(isset($desafio['recommendedSolution']))
+                                                        <div class="desafio-solution">Solución recomendada: {{ $desafio['recommendedSolution'] }}</div>
+                                                    @endif
+                                                @else
+                                                    <div class="desafio-title">{{ is_string($desafio) ? $desafio : 'Desafío no especificado' }}</div>
+                                                @endif
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <div class="desafio-item">
+                                        <div class="desafio-title">{{ $contact->desafios ?: 'No especificado' }}</div>
+                                    </div>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Rol:</div>
+                        <div class="info-value">
+                            @if($contact->rol === 'otros_rol')
+                                {{ $contact->rol_otro }}
+                            @else
+                                {{ $contact->rol }}
+                            @endif
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Contactar en:</div>
+                        <div class="info-value">{{ $contact->momento_contacto }}</div>
+                    </div>
+                    @if($contact->mensaje)
+                    <div class="info-row">
+                        <div class="info-label">Mensaje:</div>
+                        <div class="info-value">{{ $contact->mensaje }}</div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
 
-    <table>
-        <tr>
-            <th>Fecha</th>
-            <td>{{ now()->format('d/m/Y H:i') }}</td>
-        </tr>
-        <tr>
-            <th>Nombre</th>
-            <td>{{ $contact->nombre }}</td>
-        </tr>
-        <tr>
-            <th>Empresa</th>
-            <td>{{ $contact->empresa }}</td>
-        </tr>
-        <tr>
-            <th>Email</th>
-            <td><a href="mailto:{{ $contact->correo }}">{{ $contact->correo }}</a></td>
-        </tr>
-        <tr>
-            <th>Teléfono</th>
-            <td>{{ $contact->telefono }}</td>
-        </tr>
-        <tr>
-            <th>Tipo de Empresa</th>
-            <td>{{ $contact->tipo_empresa }}</td>
-        </tr>
-        <tr>
-            <th>Producto de interés</th>
-            <td>{{ $contact->producto_interesado }}</td>
-        </tr>
-        <tr>
-            <th>Ubicación</th>
-            <td>{{ $contact->provincia }}, {{ $contact->localidad }}</td>
-        </tr>
-    </table>
-
-    <div style="text-align: center;">
-        <a href="mailto:{{ $contact->correo }}?subject=Respuesta a tu consulta" class="action-button">
-            Responder al contacto
-        </a>
+        <div class="footer">
+            <p>Este mensaje fue generado automáticamente. Por favor no responda a este correo.</p>
+            <p class="copyright">&copy; {{ date('Y') }} BlackCat. Todos los derechos reservados.</p>
+        </div>
     </div>
-
-    <footer>
-        <p>Este mensaje fue generado automáticamente. No responder directamente a este correo.</p>
-        <p>&copy; {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.</p>
-    </footer>
-</div>
-
 </body>
 </html>

@@ -25,20 +25,20 @@
                 <div v-else v-for="option in card" :key="option.value" class="option" :class="{
                   selected: (currentCard === 0 && card1Selection === option.value) ||
                     (currentCard === 1 && card2Selection.includes(option.value)) ||
-                    (currentCard === 2 && card3Selection.includes(option.value)) ||
+                    (currentCard === 2 && selectedOptions.includes(option.value)) || // Cambiado aquí
                     (currentCard === 3 && card4Selection.includes(option.value)) ||
                     (currentCard === 4 && card5Selection.includes(option.value))
                 }" @click="toggleOption(option.value)">
                   <div class="checkbox-visual" :class="{
                     checked: (currentCard === 0 && card1Selection === option.value) ||
                       (currentCard === 1 && card2Selection.includes(option.value)) ||
-                      (currentCard === 2 && card3Selection.includes(option.value)) ||
+                      (currentCard === 2 && selectedOptions.includes(option.value)) || // Cambiado aquí
                       (currentCard === 3 && card4Selection.includes(option.value)) ||
                       (currentCard === 4 && card5Selection.includes(option.value))
                   }">
                     <span v-if="(currentCard === 0 && card1Selection === option.value) ||
                       (currentCard === 1 && card2Selection.includes(option.value)) ||
-                      (currentCard === 2 && card3Selection.includes(option.value)) ||
+                      (currentCard === 2 && selectedOptions.includes(option.value)) || // Cambiado aquí
                       (currentCard === 3 && card4Selection.includes(option.value)) ||
                       (currentCard === 4 && card5Selection.includes(option.value))">✓</span>
                   </div>
@@ -131,6 +131,27 @@
         </template>
       </div>
     </div>
+    <!-- Overlay de loading con animación Lottie -->
+    <div v-if="isSubmitting" class="custom-overlay">
+      <div class="loading-container">
+        <div class="lottie-container">
+          <dotlottie-player
+            ref="lottiePlayer"
+            src="https://assets-v2.lottiefiles.com/a/36863850-1178-11ee-9f56-0b3b9e5300c1/ypBwsZ3fAg.lottie"
+            background="transparent"
+            speed="1"
+            style="width: 120px; height: 120px;"
+            loop
+            autoplay>
+          </dotlottie-player>
+        </div>
+        <h3>Enviando tu mensaje</h3>
+        <p>Estamos procesando tu información...</p>
+        <div class="progress-bar">
+          <div class="progress-fill" :style="{ width: progressWidth + '%' }"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -140,6 +161,8 @@ import { router } from '@inertiajs/vue3';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import challengesData from './Challenges.json';
+import '@dotlottie/player-component'; // Importar el componente Lottie
+
 import image from '@images/about/principal.png';
 
 const currentCard = ref(0);
@@ -411,30 +434,49 @@ function toggleOption(value) {
       card2Selection: card2Selection.value,
       card2Selections: card2Selections.value
     });
-  } else if (currentCard.value === 2) {
-    // Card 3 - Desafíos
-    const maxDesafios = 3;
+  } else if (currentCard.value === 2) { // Card de desafíos
+    const maxDesafios = 4;
 
     if (card1Selection.value === 'otros') {
-      // Caso especial para sector "otros"
       otrosDesafiosTexto.value = otrosDesafiosTexto.value || '';
       card3Selection.value = ['otros'];
+      selectedOptions.value = ['otros'];
     } else {
-      // Manejo normal de desafíos
-      const isSelected = card3Selection.value.includes(value);
+      // Obtener el tipo de empresa seleccionado
+      const selectedType = card2Selection.value[0];
+      const desafios = challengesData[selectedType] || [];
+
+      // Buscar el objeto completo del desafío
+      const desafioCompleto = desafios.find(d => d.value === value);
+
+      // Verificar si ya está seleccionado usando selectedOptions
+      const isSelected = selectedOptions.value.includes(value);
 
       if (isSelected) {
-        card3Selection.value = card3Selection.value.filter(v => v !== value);
-      } else if (card3Selection.value.length < maxDesafios) {
-        card3Selection.value.push(value);
+        // Remover el desafío
+        card3Selection.value = card3Selection.value.filter(d =>
+          (typeof d === 'object' ? d.value : d) !== value
+        );
+        selectedOptions.value = selectedOptions.value.filter(v => v !== value);
+      } else {
+        // PRIMERO verificar si ya se alcanzó el máximo ANTES de agregar
+        if (selectedOptions.value.length >= maxDesafios) {
+          showNotification('Puedes seleccionar máximo 3 desafíos', 'error');
+          return; // Salir sin agregar nada
+        }
+
+        // LUEGO verificar si existe el desafío y agregarlo
+        if (desafioCompleto) {
+          card3Selection.value.push(desafioCompleto);
+          selectedOptions.value.push(value);
+        }
       }
     }
 
-    selectedOptions.value = [...card3Selection.value];
-
-    console.log('Card 3 selección:', {
+    console.log('Card 3 selección actualizada:', {
       card3Selection: card3Selection.value,
-      selectedOptions: selectedOptions.value
+      selectedOptions: selectedOptions.value,
+      length: selectedOptions.value.length
     });
   } else if (currentCard.value === 3) {
     // Card 4 - Rol
@@ -554,7 +596,7 @@ function isNextDisabled() {
     if (card1Selection.value === 'otros') {
       return !otrosDesafiosTexto.value.trim();
     }
-    return card3Selection.value.length === 0;
+    return selectedOptions.value.length === 0; // Usar selectedOptions en lugar de card3Selection
   }
 
   // Card 4 - Rol
@@ -596,9 +638,9 @@ const submit = async () => {
       sector: card1Selection.value,
       sector_otro: otrosSectorTexto.value || null,
       tipo_empresa: card1Selection.value === 'otros' ? null : (card2Selection.value[0] || null),
-      desafios: card3Selection.value.includes('otros')
+      desafios: card1Selection.value === 'otros'
         ? otrosDesafiosTexto.value
-        : card3Selection.value.join(', '),
+        : JSON.stringify(card3Selection.value), // Enviar 
       desafios_otros: card3Selection.value.includes('otros') ? otrosDesafiosTexto.value : null,
       rol: card4Selection.value[0] === 'otros_rol'
         ? otrosRolTexto.value
@@ -612,6 +654,11 @@ const submit = async () => {
       accepted_privacy: acceptedPrivacy.value,
       fecha_envio: new Date().toISOString()
     };
+
+    console.log('Datos enviados:', {
+      ...formData,
+      desafios_parsed: card3Selection.value
+    });
 
     // Validación especial para desafíos
     if (card1Selection.value === 'otros') {
@@ -641,7 +688,7 @@ const submit = async () => {
     console.log('Sending form data:', formData);
     const response = await axios.post('/api/contact-form', formData);
     console.log('Response:', response.data);
-    
+
 
     if (loadingSwal) {
       loadingSwal.close();
@@ -660,12 +707,12 @@ const submit = async () => {
     currentCard.value = 0;
 
   } catch (error) {
-    
-        console.error('Error details:', {
-            message: error.message,
-            response: error.response?.data,
-            status: error.response?.status
-        });
+
+    console.error('Error details:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
 
     if (loadingSwal) {
       loadingSwal.close();

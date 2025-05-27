@@ -1,12 +1,11 @@
 <?php
-
 namespace App\Mail;
 
+use App\Models\Contact;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ContactConfirmationMail extends Mailable
 {
@@ -14,39 +13,31 @@ class ContactConfirmationMail extends Mailable
 
     public $contact;
 
-    /**
-     * Create a new message instance.
-     *
-     * @param $contact
-     * @return void
-     */
-    public function __construct($contact)
+    public function __construct(Contact $contact)
     {
         $this->contact = $contact;
+        Log::info('ContactConfirmationMail construido:', [
+            'contact_id' => $contact->id,
+            'email' => $contact->email
+        ]);
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            from: new Address($this->contact->correo, $this->contact->nombre),
-            replyTo: [
-                new Address($this->contact->correo, $this->contact->nombre),
-            ],
-            subject: 'Gracias por contactarnos',
-        );
-    }
-
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
-        return $this->view('emails.contact_confirmation')
-                   ->with(['contact' => $this->contact]);
+        Log::info('Construyendo correo:', [
+            'view' => 'emails.contact_confirmation',
+            'contact_id' => $this->contact->id
+        ]);
+
+        try {
+            return $this->subject('Gracias por contactarnos')
+                       ->view('emails.contact_confirmation');
+        } catch (\Exception $e) {
+            Log::error('Error al construir el correo:', [
+                'error' => $e->getMessage(),
+                'stack_trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
+        }
     }
 }

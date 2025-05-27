@@ -35,6 +35,7 @@ class Contact extends Model
      * Los campos que deben ser convertidos a tipos nativos.
      */
     protected $casts = [
+        'desafios' => 'json', // Esto permitirá manejar JSON automáticamente
         'accepted_privacy' => 'boolean',
         'fecha_envio' => 'datetime',
     ];
