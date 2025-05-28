@@ -14,10 +14,13 @@
               <p class="subtitle">{{ subtitles[currentCard] }}</p>
 
               <!-- Opciones dinámicas -->
-              <div v-if="Array.isArray(card)" :class="['options-grid', currentCard === 4 ? 'one-column' : '']">
+              <div v-if="Array.isArray(card)" :class="[
+                'options-grid',
+                currentCard === 4 ? 'one-column' : '',
+                currentCard === 2 && card1Selection === 'otros' ? 'no-grid' : ''
+              ]">
                 <!-- Caso especial para "otros" en la tarjeta 3 -->
                 <div v-if="currentCard === 2 && card3Selection.includes('otros')" class="otros-desafios">
-                  <h3>Cuéntanos los desafíos de tu empresa</h3>
                   <textarea v-model="otrosDesafiosTexto" class="otros-textarea" rows="4"
                     placeholder="Describe los principales desafíos que enfrenta tu empresa..."></textarea>
                 </div>
@@ -103,7 +106,7 @@
 
               <!-- Botones de navegación -->
               <div class="buttons">
-                <button @click="prevCard" :disabled="isTransitioning || currentCard === 0"
+                <button @click="prevCard" :disabled="isTransitioning"
                   :class="{ 'transitioning': isTransitioning }" class="nav-button prev-button">
                   ← Atrás
                 </button>
@@ -131,38 +134,15 @@
         </template>
       </div>
     </div>
-    <!-- Overlay de loading con animación Lottie -->
-    <div v-if="isSubmitting" class="custom-overlay">
-      <div class="loading-container">
-        <div class="lottie-container">
-          <dotlottie-player
-            ref="lottiePlayer"
-            src="https://assets-v2.lottiefiles.com/a/36863850-1178-11ee-9f56-0b3b9e5300c1/ypBwsZ3fAg.lottie"
-            background="transparent"
-            speed="1"
-            style="width: 120px; height: 120px;"
-            loop
-            autoplay>
-          </dotlottie-player>
-        </div>
-        <h3>Enviando tu mensaje</h3>
-        <p>Estamos procesando tu información...</p>
-        <div class="progress-bar">
-          <div class="progress-fill" :style="{ width: progressWidth + '%' }"></div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount} from 'vue';
 import { router } from '@inertiajs/vue3';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import challengesData from './Challenges.json';
-import '@dotlottie/player-component'; // Importar el componente Lottie
-
 import image from '@images/about/principal.png';
 
 const currentCard = ref(0);
@@ -179,7 +159,61 @@ const savedScrollPosition = ref(null);
 const otrosSectorTexto = ref('');
 const otrosDesafiosTexto = ref('');
 const otrosRolTexto = ref(''); // Agregar este ref junto a los demás refs al inicio
-const TRANSITION_DELAY = 100;
+const TRANSITION_DELAY = 50;
+
+const previousPosition = ref({ x: 0, y: 0 });
+let popStateHandler = null;
+
+// Modifica la función onMounted
+onMounted(() => {
+  // Guardar la posición inicial cuando el componente se monta
+  previousPosition.value = {
+    x: window.pageXOffset || window.scrollX,
+    y: window.pageYOffset || window.scrollY
+  };
+
+  // Configurar el manejador del evento popstate
+  popStateHandler = (event) => {
+    // Restaurar la posición guardada
+    if (previousPosition.value) {
+      window.scrollTo({
+        left: previousPosition.value.x,
+        top: previousPosition.value.y,
+        behavior: 'instant' // Usar 'instant' en lugar de 'auto'
+      });
+    }
+  };
+
+  // Agregar el listener
+  window.addEventListener('popstate', popStateHandler);
+});
+
+// Agrega esta función para guardar la posición inicial
+onMounted(() => {
+  // Guardar posición inicial
+  previousPosition.value = {
+    x: window.pageXOffset || window.scrollX,
+    y: window.pageYOffset || window.scrollY
+  };
+
+  // Agregar listener para el evento popstate
+  popStateHandler = () => {
+    window.scrollTo({
+      left: previousPosition.value.x,
+      top: previousPosition.value.y,
+      behavior: 'auto'
+    });
+  };
+  
+  window.addEventListener('popstate', popStateHandler);
+});
+
+// Limpiar el listener cuando el componente se desmonta
+onBeforeUnmount(() => {
+  if (popStateHandler) {
+    window.removeEventListener('popstate', popStateHandler);
+  }
+});
 
 const titles = [
   '¿Cuál es el sector de tu empresa?',
@@ -530,18 +564,24 @@ function prevCard() {
   isTransitioning.value = true;
 
   if (currentCard.value === 0) {
-    // Lógica existente para volver al inicio
-    router.visit('/#formulario', {
-      preserveScroll: true,
-      onSuccess: () => {
-        setTimeout(() => {
-          window.scrollTo({
-            top: savedScrollPosition.value,
-            behavior: 'auto',
-          });
-          isTransitioning.value = false;
-        }, TRANSITION_DELAY);
-      },
+    // Guardar la posición actual
+    previousPosition.value = {
+      x: window.pageXOffset || window.scrollX,
+      y: window.pageYOffset || window.scrollY
+    };
+
+    // Forzar la navegación hacia atrás
+    router.visit(document.referrer || '/', {
+      replace: true,
+      onFinish: () => {
+        // Restaurar la posición después de la navegación
+        window.scrollTo({
+          left: previousPosition.value.x,
+          top: previousPosition.value.y,
+          behavior: 'instant'
+        });
+        isTransitioning.value = false;
+      }
     });
     return;
   }
@@ -632,6 +672,24 @@ const submit = async () => {
 
   isTransitioning.value = true;
   let loadingSwal;
+
+  Swal.fire({
+  title: 'Enviando mensaje',
+  html: `
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Procesando tu mensaje...</p>
+    </div>
+  `,
+  showConfirmButton: false,
+  allowOutsideClick: false,
+  background: '#191919',
+  customClass: {
+    popup: 'dark-popup'
+  }
+});
+
+
 
   try {
     const formData = {
@@ -1118,10 +1176,21 @@ button:hover:not(:disabled) {
   margin-top: 15px;
 }
 
+.no-grid {
+  display: block !important;
+  max-width: 100% !important;
+}
+
+.no-grid .otros-desafios {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .otros-desafios {
+  align-items: center;
+  align-content: center;
   width: 100%;
   padding: 20px;
-  background-color: #161716;
   border-radius: 16px;
 }
 
@@ -1150,6 +1219,7 @@ button:hover:not(:disabled) {
 }
 
 @media (max-width: 1024px) {
+
   .buttons {
     flex-direction: column;
   }
@@ -1240,4 +1310,60 @@ button:hover:not(:disabled) {
     top: 12px;
   }
 }
+
+.paper-plane-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.paper-plane {
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(-5px) rotate(-5deg);
+  }
+
+  50% {
+    transform: translateY(5px) rotate(5deg);
+  }
+}
+
+.progress-container {
+  width: 100%;
+  height: 4px;
+  background: #f0f0f0;
+  border-radius: 2px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #4e4d4d, #727270);
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+
+  50% {
+    width: 70%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
 </style>
