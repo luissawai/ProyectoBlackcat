@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CookieAuditController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PoliticasController;
 use App\Http\Controllers\ProfileController;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('public.home.index');
 
+// COOKIES
+Route::post('/cookies/consent', [CookieAuditController::class, 'storeConsent']);
+Route::get('/cookies/consent/{uuid}', [CookieAuditController::class, 'getConsent']);
 
 // POLITICAS
 Route::get('/politica-privacidad', [PoliticasController::class, 'privacidad'])->name('privacidad');

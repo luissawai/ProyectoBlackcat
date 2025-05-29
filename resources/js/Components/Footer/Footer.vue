@@ -1,6 +1,13 @@
 <script setup>
 import { ref } from "vue";
 import { Link } from "@inertiajs/vue3";
+import { useCookieConsent } from "@/services/cookieConsent.service";
+
+const { showSettingsModal } = useCookieConsent();
+
+const openCookieSettings = () => {
+  showSettingsModal();
+};
 
 import logo_blackat from "@images/blackcat-logo.png";
 import icon_linkedin from "@images/social-icons/linkedin.svg";
@@ -79,6 +86,9 @@ const currentYear = ref(new Date().getFullYear());
                         </Link>
                         <Link href="/aviso-legal" class="link-politica">
                             /Aviso legal
+                        </Link>
+                        <Link href="#" @click.prevent="openCookieSettings" class="link-politica">
+                        /Configurar cookies
                         </Link>
                     </div>
                 </div>

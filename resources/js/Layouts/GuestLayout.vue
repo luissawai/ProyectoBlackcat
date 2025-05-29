@@ -15,11 +15,16 @@
       <footer class="mt-auto w-100">
         <Footer />
       </footer>
+
+      <!-- Componente de consentimiento de cookies -->
+        <CookieConsent />
     </div>
   </template>
   
   <script setup>
   import Header from "@/Components/Header/Header.vue";
   import Footer from "@/Components/Footer/Footer.vue";
+  import CookieConsent from "@/Components/CookieConsent/CookieConsent.vue";
+
   </script>
   
