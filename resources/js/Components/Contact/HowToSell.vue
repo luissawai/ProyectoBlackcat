@@ -29,21 +29,22 @@
                   selected: (currentCard === 0 && card1Selection === option.value) ||
                     (currentCard === 1 && card2Selection.includes(option.value)) ||
                     (currentCard === 2 && selectedOptions.includes(option.value)) || // Cambiado aquí
-                    (currentCard === 3 && card4Selection.includes(option.value)) ||
-                    (currentCard === 4 && card5Selection.includes(option.value))
+                    (currentCard === 3 && card4Selection.includes(option.value))
+                    // (currentCard === 4 && card5Selection.includes(option.value))
                 }" @click="toggleOption(option.value)">
                   <div class="checkbox-visual" :class="{
                     checked: (currentCard === 0 && card1Selection === option.value) ||
                       (currentCard === 1 && card2Selection.includes(option.value)) ||
                       (currentCard === 2 && selectedOptions.includes(option.value)) || // Cambiado aquí
-                      (currentCard === 3 && card4Selection.includes(option.value)) ||
-                      (currentCard === 4 && card5Selection.includes(option.value))
+                      (currentCard === 3 && card4Selection.includes(option.value))
+                      // (currentCard === 4 && card5Selection.includes(option.value))
                   }">
                     <span v-if="(currentCard === 0 && card1Selection === option.value) ||
                       (currentCard === 1 && card2Selection.includes(option.value)) ||
                       (currentCard === 2 && selectedOptions.includes(option.value)) || // Cambiado aquí
-                      (currentCard === 3 && card4Selection.includes(option.value)) ||
-                      (currentCard === 4 && card5Selection.includes(option.value))">✓</span>
+                      (currentCard === 3 && card4Selection.includes(option.value))
+                      // (currentCard === 4 && card5Selection.includes(option.value))
+                      ">✓</span>
                   </div>
                   <div class="text">
                     <strong>{{ option.title }}</strong>
@@ -150,7 +151,7 @@ const card1Selection = ref(null);
 const card2Selection = ref([]);
 const card3Selection = ref([]); // Para desafíos
 const card4Selection = ref([]); // Para rol
-const card5Selection = ref([]); // Para momento de contacto
+// const card5Selection = ref([]); // Para momento de contacto
 const selectedOptions = ref([]);
 const card2Selections = ref([]);
 const isTransitioning = ref(false);
@@ -351,11 +352,11 @@ const optionsCard4 = [
   { value: 'otros_rol', title: 'Otros (especificar):', description: 'Cuéntanos cual es tu rol' },
 ]
 
-const optionsCard5 = [
-  { value: 'lo antes posible', title: 'Lo antes posible', description: 'Necesito soluciones ya' },
-  { value: 'en unos dias', title: 'En unos días', description: 'Estoy evaluando opciones' },
-  { value: 'solo estoy explorando', title: 'Solo estoy explorando', description: 'Curioso, pero sin compromiso aún' },
-]
+// const optionsCard5 = [
+//   { value: 'lo antes posible', title: 'Lo antes posible', description: 'Necesito soluciones ya' },
+//   { value: 'en unos dias', title: 'En unos días', description: 'Estoy evaluando opciones' },
+//   { value: 'solo estoy explorando', title: 'Solo estoy explorando', description: 'Curioso, pero sin compromiso aún' },
+// ]
 
 const contact = ref({
   name: '',
@@ -405,7 +406,7 @@ const chunkedCards = computed(() => {
 
   // Card 4 y 5
   cards.push(optionsCard4);
-  cards.push(optionsCard5);
+  //cards.push(optionsCard5);
 
   // Formulario final
   cards.push('form');
@@ -522,11 +523,12 @@ function toggleOption(value) {
       otrosRolTexto.value = '';
     }
     selectedOptions.value = card4Selection.value;
-  } else if (currentCard.value === 4) {
-    // Card 5 - Momento de contacto
-    card5Selection.value = [value];
-    selectedOptions.value = [value];
-  }
+  // } else if (currentCard.value === 4) {
+  //   // Card 5 - Momento de contacto
+  //   card5Selection.value = [value];
+  //   selectedOptions.value = [value];
+  // }
+}
 }
 
 watch(card2Selection, (newValue) => {
@@ -648,9 +650,9 @@ function isNextDisabled() {
   }
 
   // Card 5 - Momento de contacto
-  if (currentCard.value === 4) {
-    return card5Selection.value.length === 0;
-  }
+  // if (currentCard.value === 4) {
+  //   return card5Selection.value.length === 0;
+  // }
 
   // Formulario final
   return !contact.value.name ||
@@ -677,15 +679,28 @@ const submit = async () => {
   title: 'Enviando mensaje',
   html: `
     <div class="loading-spinner">
-      <div class="spinner"></div>
-      <p>Procesando tu mensaje...</p>
+      <div class="paper-plane-container">
+        <svg class="paper-plane" viewBox="0 0 512 512" width="50" height="50">
+          <path fill="#ffffff" d="M511.6 36.86l-64 415.1c-1.5 9.734-7.375 18.22-15.97 23.05c-4.844 2.719-10.27 4.097-15.68 4.097c-4.188 0-8.319-.8154-12.29-2.472l-122.6-51.1l-50.86 76.29C226.3 508.5 219.8 512 212.8 512C201.3 512 192 502.7 192 491.2v-96.18c0-7.115 2.372-14.03 6.742-19.64L416 96l-293.7 264.3L19.69 317.5C8.438 312.8 .8125 302.2 .0625 289.1s5.469-23.72 16.06-29.77l448-255.1c10.69-6.109 23.88-5.547 34 1.406S513.5 24.72 511.6 36.86z"/>
+        </svg>
+      </div>
+      <p class="loading-text">Procesando tu mensaje...</p>
+      <div class="progress-container">
+        <div class="progress-bar"></div>
+      </div>
     </div>
   `,
+  width: 400,
+  padding: "2em",
+  color: "#ffffff",
+  background: "#191919",
   showConfirmButton: false,
   allowOutsideClick: false,
-  background: '#191919',
+  backdrop: `rgba(25, 25, 25, 0.8)`,
   customClass: {
-    popup: 'dark-popup'
+    popup: 'dark-popup',
+    container: 'dark-container',
+    content: 'loading-content'
   }
 });
 
@@ -704,7 +719,7 @@ const submit = async () => {
         ? otrosRolTexto.value
         : (card4Selection.value[0] || 'No especificado'),
       rol_otro: otrosRolTexto.value || null,
-      momento_contacto: card5Selection.value[0] || null,
+      // momento_contacto: card5Selection.value[0] || null,
       nombre: contact.value.name,
       email: contact.value.email,
       telefono: contact.value.phone,
@@ -806,7 +821,7 @@ const resetForm = () => {
   card2Selection.value = [];
   card3Selection.value = [];
   card4Selection.value = [];
-  card5Selection.value = [];
+  // card5Selection.value = [];
   selectedOptions.value = [];
   card2Selections.value = [];
   otrosSectorTexto.value = '';

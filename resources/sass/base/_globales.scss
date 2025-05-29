@@ -159,3 +159,72 @@ p {
     z-index: 9999 !important;
     
 }
+
+//Estilos form 
+
+/* Add to your existing <style> section */
+:global(.dark-popup) {
+  border: 1px solid #727270 !important;
+  border-radius: 16px !important;
+}
+
+:global(.dark-container) {
+  backdrop-filter: blur(5px);
+}
+
+:global(.loading-spinner) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em;
+}
+
+:global(.loading-text) {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin: 1em 0;
+}
+
+:global(.paper-plane-container) {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  animation: float 1.5s ease-in-out infinite;
+}
+
+:global(.paper-plane) {
+  width: 100%;
+  height: 100%;
+}
+
+:global(.progress-container) {
+  width: 100%;
+  height: 4px;
+  background: #232324;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 1em;
+}
+
+:global(.progress-bar) {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #4e4d4d, #727270);
+  animation: progress 1.5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(-5px) rotate(-5deg); }
+  50% { transform: translateY(5px) rotate(5deg); }
+}
+
+@keyframes progress {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
+
+:global(.swal2-title) {
+  color: #ffffff !important;
+  font-size: 1.5rem !important;
+}

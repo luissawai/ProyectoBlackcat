@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('desafios_otros')->nullable();
             $table->string('rol');
             $table->string('rol_otro')->nullable();
-            $table->string('momento_contacto');
+            // $table->string('momento_contacto');
             $table->string('nombre');
             $table->string('email');
             $table->string('telefono');

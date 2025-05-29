@@ -183,6 +183,7 @@ onMounted(() => {
 }
 
 .logo-img {
+  transform: scale(0.8);
   width: 150px;
   height: 120px;
   object-fit: contain;
@@ -193,7 +194,7 @@ onMounted(() => {
 
 .card:hover .logo-img {
   opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1);
 }
 
 

@@ -20,7 +20,11 @@ const startProcess = () => {
         Cuéntanos qué necesitas y crearemos la solución ideal para tu negocio
       </p>
       <button class="start-btn" @click="startProcess">
-        EMPEZAR <span>→</span>
+        <svg>
+          <rect x="0" y="0" fill="none" width="100%" height="100%" />
+        </svg>
+        <span class="btn-text">EMPEZAR</span>
+        <span class="btn-arrow">→</span>
       </button>
     </div>
 
@@ -165,18 +169,99 @@ const startProcess = () => {
   .welcome-card {
     padding: 30px 15px;
   }
-  
+
   .headline {
     font-size: 2.2rem;
   }
-  
+
   .tagline {
     font-size: 2.8rem;
     margin-bottom: 30px;
   }
-  
+
   .description {
     font-size: 1.6rem;
+  }
+}
+
+.start-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 200px;
+  height: 55px;
+  color: #111;
+  background: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s ease;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.start-btn svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.start-btn svg rect {
+  stroke: #111;
+  stroke-width: 2;
+  stroke-dasharray: 450, 0;
+  stroke-dashoffset: 0;
+  transition: all 0.6s ease;
+}
+
+.start-btn:hover {
+  background: transparent;
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+.start-btn:hover svg rect {
+  stroke-width: 3;
+  stroke-dasharray: 20, 300;
+  stroke-dashoffset: 48;
+  stroke: #ffffff;
+  transition: all 0.8s ease-in-out;
+}
+
+.start-btn:active {
+  transform: scale(0.95);
+}
+
+.btn-text {
+  position: relative;
+  z-index: 1;
+  transition: all 0.6s ease;
+}
+
+.btn-arrow {
+  position: relative;
+  z-index: 1;
+  transition: all 0.6s ease;
+  transform: translateX(0);
+}
+
+.start-btn:hover .btn-arrow {
+  transform: translateX(5px);
+}
+
+@media (max-width: 768px) {
+  .start-btn {
+    width: 180px;
+    height: 50px;
+    font-size: 1.4rem;
   }
 }
 </style>

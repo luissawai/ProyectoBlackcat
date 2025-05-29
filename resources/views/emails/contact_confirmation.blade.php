@@ -271,10 +271,10 @@
                         </div>
                     </div>
 
-                    <div class="info-row">
+                    {{-- <div class="info-row">
                         <div class="info-label">Contactar en:</div>
                         <div class="info-value">{{ $contact->momento_contacto }}</div>
-                    </div>
+                    </div> --}}
 
                     @if($contact->mensaje)
                         <div class="info-row">
