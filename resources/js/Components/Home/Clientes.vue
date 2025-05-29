@@ -197,7 +197,6 @@ onMounted(() => {
   transform: scale(1);
 }
 
-
 .card:hover .logo-hover-effect {
   opacity: 1;
 }
@@ -232,9 +231,6 @@ onMounted(() => {
     rgba(22, 24, 22, 0) 100%
   );
 }
-
-
-
 
 .elipse1{
   top:-18px;
