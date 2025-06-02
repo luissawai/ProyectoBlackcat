@@ -30,21 +30,21 @@
                     (currentCard === 1 && card2Selection.includes(option.value)) ||
                     (currentCard === 2 && selectedOptions.includes(option.value)) || // Cambiado aquí
                     (currentCard === 3 && card4Selection.includes(option.value))
-                    // (currentCard === 4 && card5Selection.includes(option.value))
+                  // (currentCard === 4 && card5Selection.includes(option.value))
                 }" @click="toggleOption(option.value)">
                   <div class="checkbox-visual" :class="{
                     checked: (currentCard === 0 && card1Selection === option.value) ||
                       (currentCard === 1 && card2Selection.includes(option.value)) ||
                       (currentCard === 2 && selectedOptions.includes(option.value)) || // Cambiado aquí
                       (currentCard === 3 && card4Selection.includes(option.value))
-                      // (currentCard === 4 && card5Selection.includes(option.value))
+                    // (currentCard === 4 && card5Selection.includes(option.value))
                   }">
                     <span v-if="(currentCard === 0 && card1Selection === option.value) ||
                       (currentCard === 1 && card2Selection.includes(option.value)) ||
                       (currentCard === 2 && selectedOptions.includes(option.value)) || // Cambiado aquí
                       (currentCard === 3 && card4Selection.includes(option.value))
                       // (currentCard === 4 && card5Selection.includes(option.value))
-                      ">✓</span>
+                    ">✓</span>
                   </div>
                   <div class="text">
                     <strong>{{ option.title }}</strong>
@@ -107,8 +107,8 @@
 
               <!-- Botones de navegación -->
               <div class="buttons">
-                <button @click="prevCard" :disabled="isTransitioning"
-                  :class="{ 'transitioning': isTransitioning }" class="nav-button prev-button">
+                <button @click="prevCard" :disabled="isTransitioning" :class="{ 'transitioning': isTransitioning }"
+                  class="nav-button prev-button">
                   ← Atrás
                 </button>
                 <button v-if="currentCard < chunkedCards.length - 1" @click="nextCard"
@@ -139,7 +139,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount} from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { router } from '@inertiajs/vue3';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -205,7 +205,7 @@ onMounted(() => {
       behavior: 'auto'
     });
   };
-  
+
   window.addEventListener('popstate', popStateHandler);
 });
 
@@ -523,12 +523,12 @@ function toggleOption(value) {
       otrosRolTexto.value = '';
     }
     selectedOptions.value = card4Selection.value;
-  // } else if (currentCard.value === 4) {
-  //   // Card 5 - Momento de contacto
-  //   card5Selection.value = [value];
-  //   selectedOptions.value = [value];
-  // }
-}
+    // } else if (currentCard.value === 4) {
+    //   // Card 5 - Momento de contacto
+    //   card5Selection.value = [value];
+    //   selectedOptions.value = [value];
+    // }
+  }
 }
 
 watch(card2Selection, (newValue) => {
@@ -673,36 +673,40 @@ const submit = async () => {
   }
 
   isTransitioning.value = true;
-  let loadingSwal;
 
+  // Mostrar animación de carga personalizada
   Swal.fire({
-  title: 'Enviando mensaje',
-  html: `
-    <div class="loading-spinner">
-      <div class="paper-plane-container">
-        <svg class="paper-plane" viewBox="0 0 512 512" width="50" height="50">
-          <path fill="#ffffff" d="M511.6 36.86l-64 415.1c-1.5 9.734-7.375 18.22-15.97 23.05c-4.844 2.719-10.27 4.097-15.68 4.097c-4.188 0-8.319-.8154-12.29-2.472l-122.6-51.1l-50.86 76.29C226.3 508.5 219.8 512 212.8 512C201.3 512 192 502.7 192 491.2v-96.18c0-7.115 2.372-14.03 6.742-19.64L416 96l-293.7 264.3L19.69 317.5C8.438 312.8 .8125 302.2 .0625 289.1s5.469-23.72 16.06-29.77l448-255.1c10.69-6.109 23.88-5.547 34 1.406S513.5 24.72 511.6 36.86z"/>
-        </svg>
-      </div>
-      <p class="loading-text">Procesando tu mensaje...</p>
-      <div class="progress-container">
-        <div class="progress-bar"></div>
+    title: 'Enviando mensaje',
+    html: `
+    <div class="loading-spinner" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <dotlottie-player
+        src="https://lottie.host/ab1dad08-5f51-4013-9f2a-a8e4c81038c3/oZyVZzpsdO.lottie"
+        background="transparent"
+        speed="1"
+        style="width: 200px; height: 200px"
+        loop
+        autoplay
+      ></dotlottie-player>
+      <p class="loading-text" style="margin-top: 1rem;">Procesando tu mensaje...</p>
+      <div class="progress-container" style="width: 100%; margin-top: 1rem;">
+        <div class="progress-bar animate-progress"></div>
       </div>
     </div>
   `,
-  width: 400,
-  padding: "2em",
-  color: "#ffffff",
-  background: "#191919",
-  showConfirmButton: false,
-  allowOutsideClick: false,
-  backdrop: `rgba(25, 25, 25, 0.8)`,
-  customClass: {
-    popup: 'dark-popup',
-    container: 'dark-container',
-    content: 'loading-content'
-  }
-});
+    width: 420,
+    padding: "2em",
+    background: "#1e1e1e",
+    color: "#fff",
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    backdrop: `rgba(0, 0, 0, 0.75)`,
+    customClass: {
+      popup: 'dark-popup'
+    },
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
 
 
 
@@ -713,13 +717,12 @@ const submit = async () => {
       tipo_empresa: card1Selection.value === 'otros' ? null : (card2Selection.value[0] || null),
       desafios: card1Selection.value === 'otros'
         ? otrosDesafiosTexto.value
-        : JSON.stringify(card3Selection.value), // Enviar 
+        : JSON.stringify(card3Selection.value),
       desafios_otros: card3Selection.value.includes('otros') ? otrosDesafiosTexto.value : null,
       rol: card4Selection.value[0] === 'otros_rol'
         ? otrosRolTexto.value
         : (card4Selection.value[0] || 'No especificado'),
       rol_otro: otrosRolTexto.value || null,
-      // momento_contacto: card5Selection.value[0] || null,
       nombre: contact.value.name,
       email: contact.value.email,
       telefono: contact.value.phone,
@@ -728,68 +731,48 @@ const submit = async () => {
       fecha_envio: new Date().toISOString()
     };
 
-    console.log('Datos enviados:', {
-      ...formData,
-      desafios_parsed: card3Selection.value
-    });
-
-    // Validación especial para desafíos
+    // Validación de desafíos
     if (card1Selection.value === 'otros') {
       if (!otrosDesafiosTexto.value.trim()) {
+        Swal.close();
         showNotification('Por favor describe los desafíos de tu empresa', 'error');
         currentCard.value = 2;
         return;
       }
-    } else {
-      if (!card3Selection.value.length) {
-        showNotification('Por favor indica los desafíos de tu empresa', 'error');
-        currentCard.value = 2;
-        return;
-      }
+    } else if (!card3Selection.value.length) {
+      Swal.close();
+      showNotification('Por favor indica los desafíos de tu empresa', 'error');
+      currentCard.value = 2;
+      return;
     }
 
-    // Mostrar loading
-    loadingSwal = Swal.fire({
-      title: "Enviando...",
-      html: "Por favor espera mientras procesamos tu mensaje.",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-
-    console.log('Sending form data:', formData);
     const response = await axios.post('/api/contact-form', formData);
-    console.log('Response:', response.data);
+    console.log('Respuesta enviada:', response.data);
 
-
-    if (loadingSwal) {
-      loadingSwal.close();
-    }
+    Swal.close();
 
     await Swal.fire({
+      icon: "success",
       title: "¡Gracias!",
       text: "Tu mensaje ha sido enviado correctamente.",
-      icon: "success",
       confirmButtonText: "Aceptar",
-      confirmButtonColor: "#4e4d4d"
+      confirmButtonColor: "#4e4d4d",
+      customClass: {
+        popup: 'dark-popup'
+      },
+      background: "#1e1e1e",
+      color: "#fff",
+      backdrop: `rgba(0, 0, 0, 0.75)`
     });
 
-    // Resetear formulario
+
     resetForm();
     currentCard.value = 0;
 
   } catch (error) {
+    console.error('Error al enviar:', error);
 
-    console.error('Error details:', {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status
-    });
-
-    if (loadingSwal) {
-      loadingSwal.close();
-    }
+    Swal.close();
 
     let errorMessage = 'Hubo un error al enviar el formulario.';
 
@@ -797,7 +780,6 @@ const submit = async () => {
       const firstError = Object.values(error.response.data.errors)[0];
       errorMessage = firstError;
 
-      // Manejar navegación a tarjeta con error
       if (error.response.data.errors.desafios && card1Selection.value !== 'otros') {
         currentCard.value = 2;
       }
@@ -859,6 +841,8 @@ const showNotification = (message, type = 'success') => {
   position: absolute;
   top: 0;
   width: 100%;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  /* Add this line */
   z-index: 1;
 }
 
@@ -1379,6 +1363,20 @@ button:hover:not(:disabled) {
   100% {
     width: 100%;
   }
+}
+
+/* Styles para envio form */
+
+.animate-progress {
+  height: 4px;
+  background: #00c4ff;
+  animation: progressAnim 2.5s linear forwards;
+  border-radius: 4px;
+}
+
+@keyframes progressAnim {
+  0% { width: 0%; }
+  100% { width: 100%; }
 }
 
 </style>
