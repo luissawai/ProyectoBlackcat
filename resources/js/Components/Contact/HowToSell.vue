@@ -769,6 +769,15 @@ const submit = async () => {
     resetForm();
     currentCard.value = 0;
 
+    router.visit('/', { 
+      replace: true,
+      preserveScroll: true,
+      onFinish: () => {
+        window.scrollTo(0, 0);
+      }
+    });
+
+
   } catch (error) {
     console.error('Error al enviar:', error);
 

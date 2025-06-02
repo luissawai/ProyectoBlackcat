@@ -1,7 +1,7 @@
 <script setup>
 import box_degradado from "@images/box-degradado.png";
 import elipse from "@images/elipse.png";
-import { onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 
 // Logos de clientes
 import logo_rivas from "@images/Logo-clientes/rivas.png";
@@ -13,18 +13,59 @@ import logo_gp_benjamin from "@images/Logo-clientes/gp-benjamin.png";
 import logo_el_ayudante from "@images/Logo-clientes/el-ayudante.png";
 import logo_psicologos from "@images/Logo-clientes/psicologos.svg";
 import logo_next_client from "@images/Logo-clientes/next_client.png";
+import logo_lopez_alonso from "@images/Logo-clientes/lopez_alonso.png";
 
 // Lista duplicada para fluidez
 const logos = [
-  { src: logo_rivas, alt: "Rivas" },
-  { src: logo_abaloa, alt: "Abaloa" },
-  { src: logo_palsan, alt: "Palsan" },
-  { src: logo_logopedas, alt: "Logopedas" },
-  { src: logo_fontcal, alt: "Fontcal" },
-  { src: logo_gp_benjamin, alt: "Grupo Benjamin" },
-  { src: logo_el_ayudante, alt: "El Ayudante" },
-  { src: logo_psicologos, alt: "Psicólogos" },
-  { src: logo_next_client, alt: "Next Client" }
+  {
+    src: logo_rivas,
+    alt: "Rivas",
+    href: "https://refrigeracionrivassl.com/"
+  },
+  {
+    src: logo_abaloa,
+    alt: "Abaloa",
+    href: "https://construccionesabaloa.com/"
+  },
+  {
+    src: logo_palsan,
+    alt: "Palsan",
+    href: "https://palsan.es/"
+  },
+  {
+    src: logo_logopedas,
+    alt: "Logopedas",
+    href: "https://www.logopedascantabria.org/"
+  },
+  {
+    src: logo_fontcal,
+    alt: "Fontcal",
+    href: "https://fontaneriafontcal.com/"
+  },
+  {
+    src: logo_gp_benjamin,
+    alt: "Grupo Benjamin",
+    href: "https://carpinteriabenjamin.com/"
+  },
+  {
+    src: logo_el_ayudante,
+    alt: "El Ayudante",
+    href: "https://www.elayudante.es/"
+  },
+  {
+    src: logo_psicologos,
+    alt: "Psicólogos",
+    href: "https://copcantabria.es/"
+  },
+  {
+    src: logo_next_client,
+    alt: "Next Client",
+  },
+  {
+    src: logo_lopez_alonso,
+    alt: "López Alonso",
+    href: "https://lopezalonsoinmobiliaria.com/"
+  },
 ];
 
 const duplicatedLogos = [...logos, ...logos] // Duplicado para fluidez
@@ -81,23 +122,29 @@ onMounted(() => {
               <div class="group" :class="{ 'paused': isPaused }">
                 <div class="card" v-for="(logo, index) in duplicatedLogos" :key="`logo-${index}`">
                   <div class="card-inner">
-                    <img :src="logo.src" :alt="logo.alt" class="logo-img">
-                    <div class="logo-hover-effect"></div>
+                    <a :href="logo.href" target="_blank" rel="noopener noreferrer" class="logo-link">
+                      <img :src="logo.src" :alt="logo.alt" class="logo-img">
+                      <div class="logo-hover-effect"></div>
+                    </a>
                   </div>
                 </div>
               </div>
+
+              <!-- El segundo grupo ya tiene el enlace correcto -->
               <div class="group" :class="{ 'paused': isPaused }" aria-hidden="true">
                 <div class="card" v-for="(logo, index) in duplicatedLogos" :key="`logo-copy-${index}`">
                   <div class="card-inner">
-                    <img :src="logo.src" :alt="logo.alt" class="logo-img">
-                    <div class="logo-hover-effect"></div>
+                    <a :href="logo.href" target="_blank" rel="noopener noreferrer" class="logo-link">
+                      <img :src="logo.src" :alt="logo.alt" class="logo-img">
+                      <div class="logo-hover-effect"></div>
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
             <div class="elipse2">
-            <img :src="elipse" class="logo-img-elipse">
-          </div>
+              <img :src="elipse" class="logo-img-elipse">
+            </div>
 
             <!-- Efectos de gradiente en los bordes -->
             <div class="gradient-overlay left"></div>
@@ -114,20 +161,16 @@ onMounted(() => {
 .brand-showcase {
   position: relative;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 15%,
-    black 85%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 15%,
-    black 85%,
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(to right,
+      transparent 0%,
+      black 15%,
+      black 85%,
+      transparent 100%);
+  mask-image: linear-gradient(to right,
+      transparent 0%,
+      black 15%,
+      black 85%,
+      transparent 100%);
 }
 
 
@@ -142,7 +185,8 @@ onMounted(() => {
   width: max-content;
   gap: 0;
   transform-style: preserve-3d;
-  perspective: 1000px; /* añade perspectiva */
+  perspective: 1000px;
+  /* añade perspectiva */
 }
 
 .group {
@@ -154,11 +198,13 @@ onMounted(() => {
 
 .card {
   flex: 0 0 auto;
-  width: 300px; /* tamaño uniforme */
+  width: 300px;
+  /* tamaño uniforme */
   height: 270px;
   border-radius: 16px;
   padding: 20px;
-  background-color: #161816; /* fondo negro total */
+  background-color: #161816;
+  /* fondo negro total */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   position: relative;
@@ -175,19 +221,22 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 10px;
 }
 
 .card:hover {
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15); /* iluminación en hover */
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+  /* iluminación en hover */
   transform: scale(1.02);
 }
 
 .logo-img {
-  transform: scale(0.8);
-  width: 150px;
-  height: 120px;
+  transform: scale(0.95);
+  width: 180px;
+  height: 170px;
   object-fit: contain;
-  filter: brightness(0%) grayscale(100%) invert(100%); /* casi blanco, uniforme */
+  filter: brightness(0%) grayscale(100%) invert(100%);
+  /* casi blanco, uniforme */
   opacity: 0.9;
   transition: all 0.3s ease;
 }
@@ -205,55 +254,93 @@ onMounted(() => {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 200px; /* Aumentamos el ancho para mejor cobertura */
+  width: 200px;
+  /* Aumentamos el ancho para mejor cobertura */
   pointer-events: none;
   z-index: 2;
 }
 
 .gradient-overlay.left {
   left: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(22, 24, 22, 1) 0%,
-    rgba(22, 24, 22, 0.8) 30%,
-    rgba(22, 24, 22, 0.4) 60%,
-    rgba(22, 24, 22, 0) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(22, 24, 22, 1) 0%,
+      rgba(22, 24, 22, 0.8) 30%,
+      rgba(22, 24, 22, 0.4) 60%,
+      rgba(22, 24, 22, 0) 100%);
 }
 
 .gradient-overlay.right {
   right: 0;
-  background: linear-gradient(
-    -90deg,
-    rgba(22, 24, 22, 1) 0%,
-    rgba(22, 24, 22, 0.8) 30%,
-    rgba(22, 24, 22, 0.4) 60%,
-    rgba(22, 24, 22, 0) 100%
-  );
+  background: linear-gradient(-90deg,
+      rgba(22, 24, 22, 1) 0%,
+      rgba(22, 24, 22, 0.8) 30%,
+      rgba(22, 24, 22, 0.4) 60%,
+      rgba(22, 24, 22, 0) 100%);
 }
 
-.elipse1{
-  top:-18px;
+.elipse1 {
+  top: -18px;
   position: absolute;
   z-index: 1;
 }
 
-.elipse2{
-  top:220px;
+.elipse2 {
+  top: 220px;
   position: absolute;
   z-index: 1;
 }
 
-.logo-img-elipse{
+.logo-img-elipse {
   width: 100%;
+}
+
+.logo-link {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+}
+
+/* Update existing card styles */
+.card:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+}
+
+/* Update logo-img transition */
+.logo-img {
+  transform: scale(0.8);
+  width: 150px;
+  height: 120px;
+  object-fit: contain;
+  filter: brightness(0%) grayscale(100%) invert(100%); /* casi blanco, uniforme */
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.logo-link:hover .logo-img {
+  transform: scale(1.1);
+}
+
+.card:hover .logo-img {
+  opacity: 1;
 }
 
 @keyframes scrolling {
   0% {
     transform: translateX(0);
   }
+
   100% {
-    transform: translateX(calc(-100% - 20px)); /* Ajuste para el gap */
+    transform: translateX(calc(-100% - 20px));
+    /* Ajuste para el gap */
   }
 }
 
@@ -264,9 +351,13 @@ onMounted(() => {
     height: 110px;
     padding: 15px;
   }
-  
+
   .gradient-overlay {
     width: 150px;
+  }
+
+  .card-inner {
+    padding: 8px;
   }
 }
 
@@ -274,21 +365,25 @@ onMounted(() => {
   .brand-showcase {
     padding: 30px 0;
   }
-  
+
   .card {
     width: 150px;
     height: 90px;
     padding: 12px;
   }
-  
+
+  .card-inner {
+    padding: 6px;
+  }
+
   .logo-img {
     max-height: 50px;
   }
-  
+
   .gradient-overlay {
     width: 100px;
   }
-  
+
   .control-btn {
     width: 36px;
     height: 36px;
@@ -302,11 +397,15 @@ onMounted(() => {
     padding: 10px;
     border-radius: 12px;
   }
-  
+
+  .card-inner {
+    padding: 5px;
+  }
+
   .group {
     gap: 15px;
   }
-  
+
   .gradient-overlay {
     width: 60px;
   }
