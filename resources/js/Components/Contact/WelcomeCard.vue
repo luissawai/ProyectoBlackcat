@@ -7,6 +7,8 @@ const emit = defineEmits(['start'])
 const startProcess = () => {
   emit('start')
 }
+
+console.log('WelcomeCard component loaded')
 </script>
 
 <template>
