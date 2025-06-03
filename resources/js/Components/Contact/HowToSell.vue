@@ -139,12 +139,11 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { router } from '@inertiajs/vue3';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import challengesData from './Challenges.json';
-import image from '@images/about/principal.png';
 
 const currentCard = ref(0);
 const card1Selection = ref(null);
@@ -156,7 +155,6 @@ const selectedOptions = ref([]);
 const card2Selections = ref([]);
 const isTransitioning = ref(false);
 const acceptedPrivacy = ref(false);
-const savedScrollPosition = ref(null);
 const otrosSectorTexto = ref('');
 const otrosDesafiosTexto = ref('');
 const otrosRolTexto = ref(''); // Agregar este ref junto a los demás refs al inicio
@@ -367,12 +365,10 @@ const contact = ref({
 })
 
 const dynamicOptionsCard2 = computed(() => {
-  console.log('Calculando opciones Card2 para sector:', card1Selection.value);
 
   if (card1Selection.value) {
     // Usar directamente el valor seleccionado como clave
     const options = optionsCard2BySelection[card1Selection.value];
-    console.log('Opciones encontradas:', options);
     return options || [];
   }
   return [];
@@ -385,9 +381,7 @@ const dynamicOptionsCard3 = computed(() => {
       return [];
     } else if (card2Selection.value.length > 0) {
       const selectedType = card2Selection.value[0];
-      console.log('Tipo seleccionado para desafíos:', selectedType);
       const desafios = challengesData[selectedType] || [];
-      console.log('Desafíos encontrados:', desafios);
       return desafios;
     }
   }
@@ -443,10 +437,6 @@ function toggleOption(value) {
     card2Selections.value = [];
     otrosDesafiosTexto.value = '';
 
-    console.log('Card 1 selección:', {
-      card1Selection: card1Selection.value,
-      selectedOptions: selectedOptions.value
-    });
   } else if (currentCard.value === 1) {
     // Card 2 - Tipo de empresa
     const isSelected = card2Selection.value.includes(value);
@@ -465,10 +455,6 @@ function toggleOption(value) {
     card3Selection.value = [];
     otrosDesafiosTexto.value = '';
 
-    console.log('Card 2 selección:', {
-      card2Selection: card2Selection.value,
-      card2Selections: card2Selections.value
-    });
   } else if (currentCard.value === 2) { // Card de desafíos
     const maxDesafios = 4;
 
@@ -506,13 +492,7 @@ function toggleOption(value) {
           selectedOptions.value.push(value);
         }
       }
-    }
-
-    console.log('Card 3 selección actualizada:', {
-      card3Selection: card3Selection.value,
-      selectedOptions: selectedOptions.value,
-      length: selectedOptions.value.length
-    });
+    } 
   } else if (currentCard.value === 3) {
     // Card 4 - Rol
     if (value === 'otros_rol') {
@@ -530,14 +510,6 @@ function toggleOption(value) {
     // }
   }
 }
-
-watch(card2Selection, (newValue) => {
-  console.log('card2Selection cambió:', newValue);
-  if (newValue.length > 0) {
-    // Forzar actualización de las opciones de desafíos
-    chunkedCards.value = [...chunkedCards.value];
-  }
-});
 
 function nextCard() {
   if (isTransitioning.value) return;
@@ -612,14 +584,7 @@ function prevCard() {
 }
 
 // Agregar un watch para debuggear las selecciones
-watch(card1Selection, (newValue) => {
-  console.log('card1Selection cambió:', newValue);
-  console.log('Opciones disponibles para Card2:', dynamicOptionsCard2.value);
-});
 
-watch(card2Selection, (newValue) => {
-  console.log('card2Selection cambió:', newValue);
-});
 
 
 function isNextDisabled() {
@@ -747,8 +712,6 @@ const submit = async () => {
     }
 
     const response = await axios.post('/api/contact-form', formData);
-    console.log('Respuesta enviada:', response.data);
-
     Swal.close();
 
     await Swal.fire({

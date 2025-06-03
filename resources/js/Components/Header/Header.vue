@@ -30,7 +30,9 @@ const smoothScroll = (id) => {
     const target = document.getElementById(id);
     if (!target) return;
 
-    const targetPosition = target.getBoundingClientRect().top + window.scrollY;
+    // Add offset for the form section (adjust the value as needed)
+    const offset = id === 'formulario' ? -100 : 0;
+    const targetPosition = target.getBoundingClientRect().top + window.scrollY + offset;
     const startPosition = window.scrollY;
     const distance = targetPosition - startPosition;
     let startTime = null;
@@ -51,7 +53,7 @@ const smoothScroll = (id) => {
         if (timeElapsed < duration) {
             requestAnimationFrame(animation);
         } else {
-            closeMenu(); // Cierra el menú después del scroll
+            closeMenu();
         }
     };
 

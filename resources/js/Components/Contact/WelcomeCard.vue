@@ -34,13 +34,13 @@ const startProcess = () => {
       <div class="contact-section">
         <p class="contact-title">¿Prefieres conversar ahora?</p>
         <div class="icons">
-          <a href="tel:+1234567890" class="icon">
+          <a href="tel:+34609730277" class="icon">
             <i class="fas fa-phone"></i>
           </a>
-          <a href="https://wa.me/1234567890" target="_blank" class="icon">
+          <a href="https://wa.me/34609730277" target="_blank" class="icon">
             <i class="fab fa-whatsapp"></i>
           </a>
-          <a href="mailto:info@blackcat.com" class="icon">
+          <a href="info@blackcatsoluciones.es" class="icon">
             <i class="fas fa-envelope"></i>
           </a>
         </div>
