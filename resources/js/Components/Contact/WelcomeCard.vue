@@ -264,5 +264,5 @@ const startProcess = () => {
     height: 50px;
     font-size: 1.4rem;
   }
-}
-</style>
+} 
+</style>  
